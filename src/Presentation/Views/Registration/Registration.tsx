@@ -2,7 +2,7 @@ import useViewModel from './RegistrationViewModel';
 
 function Registration() {
 
-    const { register, onChangeEmail, onChangePassword } = useViewModel();
+    const { onClickRegister, onChangeEmail, onChangePassword } = useViewModel();
 
 
     return (
@@ -11,16 +11,16 @@ function Registration() {
             <h3>Register to use Dodo</h3>
             <input 
                 placeholder="Email..." 
-                onChange={(event) => onChangeEmail(event.target.value)}
+                onChange={onChangeEmail}
             />
 
             <input 
                 placeholder="Password..."
                 type="password"
-                onChange={(event) => onChangePassword(event.target.value)}
+                onChange={onChangePassword}
             />
 
-            <button onClick={register}>Register</button>
+            <button onClick={onClickRegister}>Register</button>
 
         
         </div>
