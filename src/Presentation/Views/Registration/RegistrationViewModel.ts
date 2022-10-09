@@ -6,7 +6,7 @@ export default function RegistrationViewModel() {
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
 
-    async function register() {
+    async function onClickRegister() {
         try {
             //Creates an account and logins automatically
             const user = await RegisterUserUseCase(registerEmail, registerPassword);
@@ -16,17 +16,17 @@ export default function RegistrationViewModel() {
         }
     };
 
-    function onChangeEmail(value: string){
-        setRegisterEmail(value);
+    function onChangeEmail(event: any) {
+        setRegisterEmail(event.target.value);
     }
 
 
-    function onChangePassword(value: string) {
-        setRegisterPassword(value);
+    function onChangePassword(event: any) {
+        setRegisterPassword(event.target.value);
     }
 
     return {
-        register,
+        onClickRegister,
         onChangeEmail,
         onChangePassword
     }
