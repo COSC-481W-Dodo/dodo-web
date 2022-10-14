@@ -19,6 +19,7 @@ function App() {
           <Route path ='/login' element = { <Login /> } />
           <Route path = '/registration' element = { <Registration /> } />
           <Route path = '/edit-account' element = { <EditAccount /> } />
+          
         </Route>
       </Routes>
     </BrowserRouter>
