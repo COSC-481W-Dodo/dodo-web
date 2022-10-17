@@ -14,7 +14,9 @@ function NavigationBar() {
                         <Link to='/'>Home</Link>
                         <Link to='/login'>Login</Link>
                         <Link to='/registration'>Registration</Link>
-                        <Link to='/edit-account'>Account</Link>
+                        <Link to='/edit-account'>Edit Account</Link>
+                        <Link to='/view-account'>View Account</Link>
+
                     </Nav>
                 </Container>
             </Navbar>
