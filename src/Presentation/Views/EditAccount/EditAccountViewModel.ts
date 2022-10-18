@@ -14,12 +14,19 @@ interface EditPasswordFormValues {
     newPassword: string
 }
 
+enum InputType {
+    PASSWORD = "password",
+    TEXT = "text"
+}
+
 export default function EditAccountViewModel() {
     
     const [user, setUser] = useState<User | null>();
     const [isEditingUsername, setIsEditingUsername] = useState(false);
     const [isChangingPassword, setIsChangingPassword] = useState(false);
     const [passwordCorrect, setPasswordCorrect] = useState(true);
+    const [oldPasswordType, setOldPasswordType] = useState(InputType.PASSWORD);
+    const [newPasswordType, setNewPasswordType] = useState(InputType.PASSWORD);
 
     const initialUsername = {
         username: user?.displayName || ""
@@ -96,6 +103,22 @@ export default function EditAccountViewModel() {
         }
     }
 
+    function onClickShowOldPassword() {
+        if (oldPasswordType === InputType.PASSWORD) {
+            setOldPasswordType(InputType.TEXT);
+        } else {
+            setOldPasswordType(InputType.PASSWORD);
+        }
+    }
+
+    function onClickShowNewPassword() {
+        if (newPasswordType === InputType.PASSWORD) {
+            setNewPasswordType(InputType.TEXT);
+        } else {
+            setNewPasswordType(InputType.PASSWORD);
+        }
+    }
+
 
     return {
         onClickEditUsername,
@@ -110,6 +133,10 @@ export default function EditAccountViewModel() {
         isChangingPassword,
         onClickToggleEditUsername,
         onClickToggleChangePassword,
-        passwordCorrect
+        passwordCorrect,
+        onClickShowOldPassword,
+        onClickShowNewPassword,
+        newPasswordType,
+        oldPasswordType
     }
 }

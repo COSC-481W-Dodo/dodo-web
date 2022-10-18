@@ -18,7 +18,11 @@ function EditAccount() {
         isChangingPassword,
         onClickToggleEditUsername,
         onClickToggleChangePassword,
-        passwordCorrect
+        passwordCorrect,
+        onClickShowOldPassword,
+        onClickShowNewPassword,
+        newPasswordType,
+        oldPasswordType
     } = useViewModel();
 
     useEffect(() => {
@@ -71,15 +75,22 @@ function EditAccount() {
                         <Form className='m-3'>
                             <div className='mb-3'>
                                 <label>Current Password</label>
-                                <Field name="oldPassword" type="password" className="form-control" placeholder="Enter a username..." />
-                                <small className="form-text text-muted">Username cannot contain special characters.</small>
+                                <Field name="oldPassword" type={oldPasswordType} className="form-control" placeholder="Enter your current password..." />
+                                <div className="form-check mt-2">
+                                    <input className="form-check-input" type="checkbox" onClick={onClickShowOldPassword} />
+                                    <label className="form-check-label">Show password</label>
+                                </div>
                                 <ErrorMessage name="oldPassword" render={message => <div className='text-danger'>{message}</div>} />
                                 { !passwordCorrect && <div className='text-danger'>Password is incorrect</div>}
                             </div>
                             <div className='mb-3'>
                                 <label>New Password</label>
-                                <Field name="newPassword" type="password" className="form-control" placeholder="Enter a username..." />
-                                <small className="form-text text-muted">Username cannot contain special characters.</small>
+                                <Field name="newPassword" type={newPasswordType} className="form-control" placeholder="Enter a password..." />
+                                <small className="form-text text-muted">Password must be eight characters or longer, must contain at least one special character, and at least one capital letter.</small>
+                                <div className="form-check mt-2">
+                                    <input className="form-check-input" type="checkbox" onClick={onClickShowNewPassword} />
+                                    <label className="form-check-label">Show password</label>
+                                </div>
                                 <ErrorMessage name="newPassword" render={message => <div className='text-danger'>{message}</div>} />
                             </div>
 
