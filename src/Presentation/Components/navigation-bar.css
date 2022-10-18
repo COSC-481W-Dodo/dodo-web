@@ -1,0 +1,12 @@
+.navbar-nav a {
+    padding: 3px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+}
+
+nav a:hover {
+    color: white;
+}
