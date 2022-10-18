@@ -1,0 +1,13 @@
+.edit-account-links {
+    cursor: pointer;
+    text-align: center;
+}
+
+.edit-section {
+    width: 35rem;
+    margin: auto;
+}
+
+.edit-section h1 {
+    text-align: center;
+}
