@@ -7,6 +7,8 @@ import Login from './Presentation/Views/Login/Login';
 import Registration from './Presentation/Views/Registration/Registration';
 import EditAccount from './Presentation/Views/EditAccount/EditAccount';
 import ViewAccount from './Presentation/Views/ViewAccount/ViewAccount';
+import CreateFlashcards from './Presentation/Views/CreateFlashcards/CreateFlashcards';
+
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,7 +23,7 @@ function App() {
           <Route path = '/registration' element = { <Registration /> } />
           <Route path = '/edit-account' element = { <EditAccount /> } />
           <Route path = '/view-account' element = { <ViewAccount /> } />
-          
+          <Route path='/create-flashcards' element={<CreateFlashcards />} />
         </Route>
       </Routes>
     </BrowserRouter>
