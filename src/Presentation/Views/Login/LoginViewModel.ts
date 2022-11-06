@@ -24,7 +24,7 @@ export default function LoginViewModel() {
     const validationSchema = Yup.object().shape({
         email: Yup.string().email("Please enter a valid email address.").required("Email is required."),
         username: Yup.string().max(30, "Too Long! Maximum 30 characters.").required("Username is required."),
-        password: Yup.string().min(8, 'Must be at least 8 characters long' ).required("Please provide a password.").matches(/^(?=.*[A-Z])(?=.*[()@#$%^&+=]).*$/, "Password must have at least one capital letter and one special character."),
+        password: Yup.string().required("Please provide a password."),
     });
 
     async function onClickLogin(formData: NewUser) {
