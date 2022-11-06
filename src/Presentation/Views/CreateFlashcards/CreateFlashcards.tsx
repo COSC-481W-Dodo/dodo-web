@@ -16,14 +16,14 @@ function CreateFlashcards() {
     const { 
         initialValues,
         validationSchema,
-        onClickCreateCards,
+        onClickCreateCardSet,
         onKeyDownPreventEnter
     } = useViewModel();
 
     return (
         <div>
             <Formik
-                onSubmit={onClickCreateCards}
+                onSubmit={onClickCreateCardSet}
                 initialValues={initialValues}
                 validationSchema={validationSchema}
             >

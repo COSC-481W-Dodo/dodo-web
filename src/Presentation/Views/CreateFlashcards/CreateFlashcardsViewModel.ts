@@ -1,6 +1,9 @@
 import { KeyboardEvent } from 'react';
 import * as Yup from 'yup';
 import { FullCardSet } from './Interfaces';
+import { CreateFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/CreateFlashcard';
+import { CreateTagUseCase } from '../../../Domain/UseCase/Tag/CreateTag';
+
 
 export default function CreateFlashcardsViewModel() {
 
@@ -23,8 +26,33 @@ export default function CreateFlashcardsViewModel() {
         ).min(1, "Please add at least one card to this set")
     });
 
-    function onClickCreateCards(data: FullCardSet) {
+    function onClickCreateCardSet(data: FullCardSet) {
         console.log(data);
+
+        const tags = data.tags;
+        let tagNames = Array<string>();
+        tags.forEach(tag => {
+            tagNames.push(tag.tagName);
+        });
+
+        const flashcards = data.flashcards;
+
+        tagNames.forEach(async (tagName) => {
+            try {
+                await CreateTagUseCase(tagName);
+            } catch(error: any) {
+                console.log(error);
+            }
+        });
+
+        flashcards.forEach(async (flashcard) => {
+            try {
+                await CreateFlashcardUseCase(flashcard, tagNames);
+            } catch(error: any) {
+                console.log(error);
+            }   
+        });
+        
     }
 
     function onKeyDownPreventEnter(event: KeyboardEvent) {
@@ -40,7 +68,7 @@ export default function CreateFlashcardsViewModel() {
     return {
         initialValues,
         validationSchema,
-        onClickCreateCards,
+        onClickCreateCardSet,
         onKeyDownPreventEnter
     }
 }   
