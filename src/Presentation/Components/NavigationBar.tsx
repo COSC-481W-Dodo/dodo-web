@@ -2,6 +2,7 @@ import { Link, Outlet } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 
 import './navigation-bar.css'
 
@@ -14,6 +15,7 @@ function NavigationBar() {
                     <Navbar.Brand><Link to='/'>Dodo</Link></Navbar.Brand>
                     <Nav>
                         <Link to='/'>Home</Link>
+                        <Link to='/create-flashcards'> <LibraryAddIcon className='card-add'/> Create </Link>
                         <Link to='/login'>Login</Link>
                         <Link to='/registration'>Registration</Link>
                         <Link to='/edit-account'>Edit Account</Link>

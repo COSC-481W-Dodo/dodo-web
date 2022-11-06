@@ -1,0 +1,77 @@
+.flashcards-form {
+    width: 90%;
+}
+
+.flashcard {
+    background-color: #e7e0eb;
+    border-radius: 5px;
+    padding-top: 10px;
+}
+
+
+.trashcan,
+.plus-sign {
+    color: #e7e0eb;
+}
+
+.tag-input[contenteditable]:empty::before {
+    content: "Enter a tag...";
+    color: gray;
+}
+
+.tag-input {
+    resize: horizontal;
+    padding: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 3px solid #6750a4;
+}
+
+.remove-tag {
+    border: none;
+    background: none;
+    margin: 3px;
+    padding: 0;
+    margin: 0;
+}
+
+.flashcard-input {
+    background-color: #e7e0eb;
+    width: 90%;
+    display: block;
+    overflow: hidden;
+    resize: none;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+
+}
+
+.flashcard-question[contenteditable]:empty::before {
+    content: "Enter a question...";
+    color: gray;
+}
+
+.flashcard-answer[contenteditable]:empty::before {
+    content: "Enter an answer...";
+    color: gray;
+}
+
+.flashcard-input:focus {
+    outline: none;
+    border-bottom-color: #6750a4;
+}
+
+.btn-success {
+    background-color: #6750a4 !important;
+    color: #e7e0eb !important;
+    border-style: none !important;
+}
+
+.btn-danger {
+    background-color: #ba1a1a !important;
+    color: #ffdad6!important;
+    border-style: none !important;
+}
