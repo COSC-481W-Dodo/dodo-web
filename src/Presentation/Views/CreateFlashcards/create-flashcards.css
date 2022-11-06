@@ -5,13 +5,17 @@
 .flashcard {
     background-color: #e7e0eb;
     border-radius: 5px;
-    padding-top: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-
-.trashcan,
 .plus-sign {
     color: #e7e0eb;
+}
+
+.trashcan {
+    color: #ba1a1a;
 }
 
 .tag-input[contenteditable]:empty::before {
@@ -20,11 +24,32 @@
 }
 
 .tag-input {
-    resize: horizontal;
     padding: 5px;
     overflow: hidden;
-    white-space: nowrap;
-    border-bottom: 3px solid #6750a4;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 3px solid black;
+    white-space: pre;
+}
+
+.tag-input:hover, .flashcard-input:hover {
+    cursor: text;
+}
+
+.tag-input-area {
+    display: inline-block;
+    padding: 5px;
+}
+
+.add-tag {
+    border: none;
+    background: none;
+}
+
+.add-tag-area {
+    display: inline-block;
+    padding: 5px;
 }
 
 .remove-tag {
@@ -33,6 +58,10 @@
     margin: 3px;
     padding: 0;
     margin: 0;
+}
+
+.flashcard-section {
+    margin-top: 50px;
 }
 
 .flashcard-input {
@@ -46,7 +75,6 @@
     border-left-style: none;
     border-bottom-style: solid;
     border-bottom-width: 3px;
-
 }
 
 .flashcard-question[contenteditable]:empty::before {
@@ -59,7 +87,7 @@
     color: gray;
 }
 
-.flashcard-input:focus {
+.flashcard-input:focus, .tag-input:focus {
     outline: none;
     border-bottom-color: #6750a4;
 }
@@ -74,4 +102,14 @@
     background-color: #ba1a1a !important;
     color: #ffdad6!important;
     border-style: none !important;
+}
+
+.btn-remove-tag {
+    background: none !important;
+    border: none !important;
+}
+
+.top-card-options {
+    border-bottom: 2px solid gray;
+    padding: 5px;
 }
