@@ -8,10 +8,17 @@ interface NewUser {
     password: string
 }
 
+enum InputType {
+    PASSWORD = "password",
+    TEXT = "text"
+}
+
 
 export default function LoginViewModel() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordType, setPasswordType] = useState(InputType.PASSWORD);
 
     // initial form values
     const initialValues = {
@@ -56,11 +63,24 @@ export default function LoginViewModel() {
         setLoginPassword(event.target.value);
     }
 
+    function onClickShowPassword() {
+        if (!passwordVisible) {
+            setPasswordType(InputType.TEXT);
+            setPasswordVisible(true);
+        } else {
+            setPasswordType(InputType.PASSWORD);
+            setPasswordVisible(false);
+        }
+    }
+
     return {
         onClickLogin,
         onChangeEmail,
         onChangePassword,
+        onClickShowPassword,
         initialValues,
-        validationSchema
+        validationSchema,
+        passwordVisible,
+        passwordType
     }
 }

@@ -5,10 +5,13 @@ function Login() {
 
     const {
         onClickLogin,
+        onClickShowPassword,
         onChangeEmail,
         onChangePassword,
         initialValues,
-        validationSchema
+        validationSchema,
+        passwordVisible,
+        passwordType
     } = useViewModel();
 
     return (
@@ -33,10 +36,15 @@ function Login() {
                             <br></br>
                             <div className="row justify-content-center">
                                 <label>Password</label>
-                                <Field name="password" type="password" className="form-control" placeholder="Password..."/>
+                                <Field name="password" type={passwordType} className="form-control" placeholder="Password..."/>
+                                <div className="form-check mt-2">
+                                    <input className="form-check-input" type="checkbox" onClick={onClickShowPassword} />
+                                    <label className="form-check-label">Show password</label>
+                                </div>
                                 <ErrorMessage name="password" render={message => <div className='text-danger'>{message}</div>} />  
                             </div>
                             <br></br>
+                            <p>Need an account? <a href="/registration">Register</a> </p>
                             <button type="submit" className="btn btn-primary">Login</button>
                         </Form>
                     </Formik>
