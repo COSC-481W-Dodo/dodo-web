@@ -1,11 +1,8 @@
+import { KeyboardEvent } from 'react';
 import * as Yup from 'yup';
 import { FullCardSet } from './Interfaces';
 
 export default function CreateFlashcardsViewModel() {
-
-    function onClickCreateCards(data: FullCardSet) {
-        console.log(data);
-    }
 
     const initialValues = {
         tags: [{ tagName: ""}],
@@ -24,11 +21,26 @@ export default function CreateFlashcardsViewModel() {
                 answer: Yup.string().required("Please provide an answer")
             })
         ).min(1, "Please add at least one card to this set")
-    })
+    });
+
+    function onClickCreateCards(data: FullCardSet) {
+        console.log(data);
+    }
+
+    function onKeyDownPreventEnter(event: KeyboardEvent) {
+        // Prevents the enter key from creating a new line in the tag field
+        if (event.key === "Enter") {
+            event.preventDefault();
+            return true;
+        }
+
+        return false;
+    }
     
     return {
-        onClickCreateCards,
         initialValues,
-        validationSchema
+        validationSchema,
+        onClickCreateCards,
+        onKeyDownPreventEnter
     }
 }   
