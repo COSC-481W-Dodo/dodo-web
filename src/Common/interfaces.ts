@@ -4,10 +4,12 @@ export interface FullCardSet {
 }
 
 export interface Card {
+    id: string;
     question: string;
     answer: string;
 }
 
 export interface Tag {
+    id: string;
     tagName: string;
 }

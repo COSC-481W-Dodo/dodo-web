@@ -1,14 +1,10 @@
 import { db } from '../DataSource/firebase';
-import { doc, addDoc, collection } from 'firebase/firestore';
-
-interface Card {
-    question: string;
-    answer: string;
-}
+import { doc, setDoc} from 'firebase/firestore';
+import { Card } from '../../Common/interfaces';
 
 export async function createFlashcard(flashcard: Card, tagNames: Array<String>) {
 
-    const result = await addDoc(collection(db, "flashcards"), {
+    const result = await setDoc(doc(db, "flashcards", flashcard.id), {
         answer: flashcard.answer,
         question: flashcard.question,
         tags: tagNames
