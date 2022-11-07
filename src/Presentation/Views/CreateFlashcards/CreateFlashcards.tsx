@@ -1,13 +1,12 @@
 import React from 'react';
 import { Formik, Form, FieldArray, Field, ErrorMessage } from 'formik';
 import useViewModel from './CreateFlashcardsViewModel';
-import { Card, Tag } from './Interfaces';
-
+import { Card, Tag } from '../../../Common/interfaces';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-
+import { v4 as uuidv4 } from 'uuid';
 
 import './create-flashcards.css';
 
@@ -23,9 +22,9 @@ function CreateFlashcards() {
     return (
         <div>
             <Formik
-                onSubmit={onClickCreateCardSet}
                 initialValues={initialValues}
                 validationSchema={validationSchema}
+                onSubmit={onClickCreateCardSet}
             >
                 {({ values, setFieldValue }) => (
                     <Form className='m-auto flashcards-form'>
@@ -42,14 +41,13 @@ function CreateFlashcards() {
                                             <div className='justify-content-start'> 
                                             <p><strong>Tags:</strong></p>
                                                 {  tags.map((tag: Tag, index: number) => (
-                                                    <div className='tag-input-area' key={index}>
+                                                    <div className='tag-input-area' key={tag.id}>
                                                         <span 
+                                                            id={`${tag.id}`}
                                                             contentEditable
                                                             className="m-3 tag-input" 
                                                             role="textbox"
-                                                            onKeyDown={(e) => {
-                                                                onKeyDownPreventEnter(e) && arrayHelpers.push({ tagName: "" });
-                                                            }}
+                                                            onKeyDown={onKeyDownPreventEnter}
                                                             onInput={(e) => setFieldValue(`tags.[${index}].tagName`, e.currentTarget.innerText)}
                                                         ></span>
 
@@ -59,7 +57,7 @@ function CreateFlashcards() {
                                                     </div>
                                                 ))}
                                                 <div className='add-tag-area'>
-                                                    <button className='add-tag' onClick={() => arrayHelpers.push({ tagName: "" })}>
+                                                    <button className='add-tag' onClick={() => arrayHelpers.push({ id: uuidv4(), tagName: "" })}>
                                                         <AddCircleIcon />
                                                     </button>
                                                 </div>
@@ -82,7 +80,7 @@ function CreateFlashcards() {
                                     <div className='flashcard-section'>
                                         {(flashcards && flashcards.length > 0) && (
                                             flashcards.map((flashcard: Card, index: number) => (
-                                                <div className='flashcard container mx-auto' key={index}>
+                                                <div className='flashcard container mx-auto' key={flashcard.id}>
 
                                                     {/* Card Options */}
                                                     <div className='row top-card-options ms-2 me-2'>
@@ -131,7 +129,7 @@ function CreateFlashcards() {
                                             <button 
                                                 type='button' 
                                                 className='btn btn-success' 
-                                                onClick={() => arrayHelpers.push({ question: "", answer: "" })}
+                                                onClick={() => arrayHelpers.push({ id: uuidv4(), question: "", answer: "" })}
                                             >
                                                 <span><AddIcon className='plus-sign' /> Add Card </span>
                                             </button>
