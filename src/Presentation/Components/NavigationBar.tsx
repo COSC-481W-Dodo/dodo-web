@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 
-import './navigation-bar.css'
+import './navigation-bar.css';
 
 function NavigationBar() {
 

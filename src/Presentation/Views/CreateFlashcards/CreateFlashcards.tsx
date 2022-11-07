@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, FieldArray, Field, ErrorMessage } from 'formik';
+import { Formik, Form, FieldArray, Field, ErrorMessage, getIn } from 'formik';
 import useViewModel from './CreateFlashcardsViewModel';
 import { Card, Tag } from '../../../Common/interfaces';
 import AddIcon from '@mui/icons-material/Add';
@@ -26,7 +26,7 @@ function CreateFlashcards() {
                 validationSchema={validationSchema}
                 onSubmit={onClickCreateCardSet}
             >
-                {({ values, setFieldValue }) => (
+                {({ values, setFieldValue, errors }) => (
                     <Form className='m-auto flashcards-form'>
 
                         {/* TAGS */}
@@ -45,7 +45,7 @@ function CreateFlashcards() {
                                                         <span 
                                                             id={`${tag.id}`}
                                                             contentEditable
-                                                            className="m-3 tag-input" 
+                                                            className={ getIn(errors, `tags.[${index}]`) ? "m-3 tag-input tag-error" : "m-3 tag-input" }
                                                             role="textbox"
                                                             onKeyDown={onKeyDownPreventEnter}
                                                             onInput={(e) => setFieldValue(`tags.[${index}].tagName`, e.currentTarget.innerText)}
@@ -54,6 +54,8 @@ function CreateFlashcards() {
                                                         <button className='remove-tag' disabled={ tags.length > 1 ? false : true } onClick={() => arrayHelpers.remove(index)}>
                                                             <RemoveCircleIcon />
                                                         </button>
+                                                        
+                                                        
                                                     </div>
                                                 ))}
                                                 <div className='add-tag-area'>
@@ -61,10 +63,8 @@ function CreateFlashcards() {
                                                         <AddCircleIcon />
                                                     </button>
                                                 </div>
-
                                             </div>
                                         }
-
                                     </div>
                                 )
                             }}
@@ -108,6 +108,7 @@ function CreateFlashcards() {
                                                                 onInput={(e) => setFieldValue(`flashcards[${index}].question`, e.currentTarget.innerText)}
                                                             ></span>
                                                             <p className='ms-3'>QUESTION</p>
+                                                            <ErrorMessage name={`flashcards[${index}].question`} render={message => <div className='ms-3  text-danger'>{message}</div>} />
                                                         </div>
                                                         
                                                         {/* Field for the answer */}
@@ -119,6 +120,7 @@ function CreateFlashcards() {
                                                                 onInput={(e) => setFieldValue(`flashcards[${index}].answer`, e.currentTarget.innerText)}
                                                             ></span>
                                                             <p className='ms-3'>ANSWER</p>
+                                                            <ErrorMessage name={`flashcards[${index}].answer`} render={message => <div className='ms-3 text-danger'>{message}</div>} />
                                                         </div>
                                                     </div>    
                                                 </div>
