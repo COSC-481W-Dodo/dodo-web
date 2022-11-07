@@ -18,6 +18,8 @@
     color: #ba1a1a;
 }
 
+
+
 .tag-input[contenteditable]:empty::before {
     content: "Enter a tag...";
     color: gray;
@@ -31,6 +33,21 @@
     border-right: none;
     border-bottom: 3px solid black;
     white-space: pre;
+}
+
+.tag-input:focus {
+    padding: 5px;
+    overflow: hidden;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 3px solid black;
+    white-space: pre;
+}
+
+.tag-error {
+    border: 2px solid #ba1a1a;
+    border-radius: 3px;
 }
 
 .tag-input:hover, .flashcard-input:hover {
