@@ -1,15 +1,20 @@
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FullCardSet } from '../../../Common/interfaces';
 import { CreateFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/CreateFlashcard';
 import { CreateTagUseCase } from '../../../Domain/UseCase/Tag/CreateTag';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthContext } from '../../../Common/AuthContext';
 
 export default function CreateFlashcardsViewModel() {
 
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const initialValues = {
         tags: [{ id: uuidv4(), tagName: ""}],
-        flashcards: [{ id: uuidv4(), question: "", answer: ""}]
+        flashcards: [{ id: uuidv4(), question: "", answer: "" }]
     }
 
     const validationSchema = Yup.object().shape({
@@ -32,10 +37,14 @@ export default function CreateFlashcardsViewModel() {
         const tags = data.tags;
         let tagNames = Array<string>();
         tags.forEach(tag => {
-            tagNames.push(tag.tagName);
+            // Ensures no duplicate tags get added to the database
+            if (tagNames.indexOf(tag.tagName) === -1) {
+                tagNames.push(tag.tagName);
+            }
         });
 
         const flashcards = data.flashcards;
+
 
         tagNames.forEach(async (tagName) => {
             try {
@@ -47,11 +56,14 @@ export default function CreateFlashcardsViewModel() {
 
         flashcards.forEach(async (flashcard) => {
             try {
-                await CreateFlashcardUseCase(flashcard, tagNames);
+                await CreateFlashcardUseCase(flashcard, tagNames, user.uid);
             } catch(error: any) {
                 console.log(error);
             }   
         });
+
+        alert("Card set has been saved");
+        window.location.reload();
         
     }
 

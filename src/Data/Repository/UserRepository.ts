@@ -54,3 +54,8 @@ export async function loginUser(email: string, password: string) {
     const result = await signInWithEmailAndPassword(auth, email, password);
     return result;
 }
+
+export function getSignedInUser() {
+    
+    return auth.currentUser;
+}

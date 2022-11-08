@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from '../../../Common/AuthContext';
 import { LoginUserUseCase } from '../../../Domain/UseCase/User/LoginUser';
 import * as Yup from 'yup';
+
 
 interface NewUser {
     email: string;
@@ -8,10 +10,12 @@ interface NewUser {
     password: string
 }
 
-
 export default function LoginViewModel() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+
+    // Getting the setUser function from AuthContext
+    const { setUser } = useContext(AuthContext);
 
     // initial form values
     const initialValues = {
@@ -41,7 +45,7 @@ export default function LoginViewModel() {
             //Logs the user in if they are registered
             const user = await LoginUserUseCase(loginEmail, loginPassword);
             console.log(user);
-            return user
+            setUser(user);
         } catch (error: any) {
             console.log(error.message);
         }

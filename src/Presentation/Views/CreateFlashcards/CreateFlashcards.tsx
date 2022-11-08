@@ -1,5 +1,6 @@
-import React from 'react';
-import { Formik, Form, FieldArray, Field, ErrorMessage, getIn } from 'formik';
+import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Formik, Form, FieldArray, ErrorMessage, getIn } from 'formik';
 import useViewModel from './CreateFlashcardsViewModel';
 import { Card, Tag } from '../../../Common/interfaces';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,10 +8,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { v4 as uuidv4 } from 'uuid';
+import { auth } from '../../../Data/DataSource/firebase';
 
 import './create-flashcards.css';
+import { AuthContext } from '../../../Common/AuthContext';
 
 function CreateFlashcards() {
+
+    const { user } = useContext(AuthContext);
+    // const navigate = useNavigate();
 
     const { 
         initialValues,
@@ -18,6 +24,13 @@ function CreateFlashcards() {
         onClickCreateCardSet,
         onKeyDownPreventEnter
     } = useViewModel();
+
+    // TODO fix redirecting, 
+    useEffect(() => {
+        // if (auth.currentUser === null) {
+        //     navigate("/");
+        // }
+    }, [user]);
 
     return (
         <div>
