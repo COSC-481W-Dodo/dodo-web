@@ -4,8 +4,7 @@ import * as Yup from 'yup';
 
 interface NewUser {
     email: string;
-    username: string;
-    password: string
+    password: string;
 }
 
 enum InputType {
@@ -23,14 +22,12 @@ export default function LoginViewModel() {
     // initial form values
     const initialValues = {
         email: "",
-        username: "",
         password: "",
     }
 
     // Validation criteria for each field in the form
     const validationSchema = Yup.object().shape({
         email: Yup.string().email("Please enter a valid email address.").required("Email is required."),
-        username: Yup.string().max(30, "Too Long! Maximum 30 characters.").required("Username is required."),
         password: Yup.string().required("Please provide a password."),
     });
 
