@@ -18,7 +18,10 @@
     color: #ba1a1a;
 }
 
-
+.user-id-field {
+    display: none;
+    visibility: hidden;
+}
 
 .tag-input[contenteditable]:empty::before {
     content: "Enter a tag...";

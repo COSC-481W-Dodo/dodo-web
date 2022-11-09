@@ -1,8 +1,4 @@
-import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import useViewModel from './AppViewModel';
-import { AuthContext } from './Common/AuthContext';
-import { GetSignedInUserUserCase } from './Domain/UseCase/User/GetSignedInUser';
 
 // Compnenets
 import NavigationBar from './Presentation/Components/NavigationBar';
@@ -19,15 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
-  const { user, setUser } = useViewModel();
-
-  /* Anytime the user changes,  */
-  useEffect(() => {
-    setUser(GetSignedInUserUserCase());
-  }, [user]);
-
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={ <NavigationBar /> }>
@@ -36,11 +24,10 @@ function App() {
             <Route path='/registration' element={ <Registration /> } />
             <Route path='/edit-account' element={ <EditAccount /> } />
             <Route path='/view-account' element={ <ViewAccount /> } />
-            <Route path='/create-flashcards' element={<CreateFlashcards />} />
+            <Route path='/create-flashcards' element={ <CreateFlashcards />} />
           </Route>
         </Routes>
       </BrowserRouter>
-    </AuthContext.Provider>
   );
 }
 
