@@ -89,6 +89,16 @@ export default function CreateFlashcardsViewModel() {
             return true;
         }
 
+        // Quick fix to prevent invalid characters from being uploaded to tag ids
+        if (event.key === "/" || 
+            event.key === "." || 
+            event.key === "[" || 
+            event.key === "]" ||
+            event.key === "*" ||
+            event.key === "`") {
+            event.preventDefault();
+        }
+
         return false;
     }
     
