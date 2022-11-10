@@ -27,8 +27,7 @@ function Login() {
                 <Navigate to="/" />
                 :
                 <div>
-                    <h1>Login Page</h1>
-                    <h3>Login to use Dodo</h3>
+                    <h3 className='mt-3'>Login to use Dodo</h3>
 
                     <div>
                         {

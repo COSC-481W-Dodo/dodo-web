@@ -23,17 +23,13 @@ function NavigationBar() {
 
     const [user, setUser] = useState<User | null>();
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-        });
-    }, [])
-
-
     // Allows us to check if the user is logged in on refresh   
-    React.useEffect(() => {
-        onAuthStateChanged(auth, (currentUser: any) => {setUser(currentUser);})  
-      },[]);
+    useEffect(() => {
+        onAuthStateChanged(auth, (currentUser) =>  {
+            setUser(currentUser);
+        }); 
+    }, []);
+
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -43,18 +39,16 @@ function NavigationBar() {
                         <Link to='/'>Home</Link>
 
                         { auth.currentUser === null ?
-                        <>
-
-                        <Link to='/login'>Login</Link>
-                        <Link to='/registration'>Registration</Link>
-                        </>
-                        :
-                        <>
-                        <Link to='/create-flashcards'> <LibraryAddIcon className='card-add'/> Create </Link>
-                        <Link to='/edit-account'>Edit Account</Link>
-                        <Link to='/view-account'>View Account</Link>
-                        <LogoutButton />
-                        </>
+                            <>
+                                <Link to='/login'>Login</Link>
+                                <Link to='/registration'>Registration</Link>
+                            </> :
+                            <>
+                                <Link to='/create-flashcards'> <LibraryAddIcon className='card-add'/> Create </Link>
+                                <Link to='/edit-account'>Edit Account</Link>
+                                <Link to='/view-account'>View Account</Link>
+                                <LogoutButton />
+                            </>
                         }
                     </Nav>
                 </Container>

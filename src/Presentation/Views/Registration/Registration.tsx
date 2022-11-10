@@ -21,8 +21,7 @@ function Registration() {
 
     return (
         <div>
-            <h1>Registration Page</h1>
-            <h3>Register to use Dodo</h3>
+            <h3 className='mt-3'>Register to use Dodo</h3>
 
             <div>
                 { !isSubmitted ? 
