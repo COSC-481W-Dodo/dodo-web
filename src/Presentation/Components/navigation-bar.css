@@ -10,3 +10,7 @@ nav a {
 nav a:hover {
     color: white;
 }
+
+.card-add{
+    color: #e7e0eb;
+}

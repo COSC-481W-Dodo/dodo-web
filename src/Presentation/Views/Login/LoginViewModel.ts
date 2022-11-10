@@ -2,6 +2,7 @@ import { useState } from "react";
 import { LoginUserUseCase } from '../../../Domain/UseCase/User/LoginUser';
 import * as Yup from 'yup';
 
+
 interface NewUser {
     email: string;
     password: string;
@@ -11,7 +12,6 @@ enum InputType {
     PASSWORD = "password",
     TEXT = "text"
 }
-
 
 export default function LoginViewModel() {
     const [loginEmail, setLoginEmail] = useState("");
@@ -45,8 +45,7 @@ export default function LoginViewModel() {
         try {
             //Logs the user in if they are registered
             const user = await LoginUserUseCase(loginEmail, loginPassword);
-            console.log(user);
-            return user
+            return user;
         } catch (error: any) {
             console.log(error.message);
         }
