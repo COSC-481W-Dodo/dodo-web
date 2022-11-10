@@ -5,29 +5,34 @@ import * as Yup from 'yup';
 
 interface NewUser {
     email: string;
-    username: string;
-    password: string
+    password: string;
+}
+
+enum InputType {
+    PASSWORD = "password",
+    TEXT = "text"
 }
 
 export default function LoginViewModel() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordType, setPasswordType] = useState(InputType.PASSWORD);
 
     // initial form values
     const initialValues = {
         email: "",
-        username: "",
         password: "",
     }
 
     // Validation criteria for each field in the form
     const validationSchema = Yup.object().shape({
         email: Yup.string().email("Please enter a valid email address.").required("Email is required."),
-        username: Yup.string().max(30, "Too Long! Maximum 30 characters.").required("Username is required."),
-        password: Yup.string().min(8, 'Must be at least 8 characters long' ).required("Please provide a password.").matches(/^(?=.*[A-Z])(?=.*[()@#$%^&+=]).*$/, "Password must have at least one capital letter and one special character."),
+        password: Yup.string().required("Please provide a password."),
     });
 
     async function onClickLogin(formData: NewUser) {
+        console.log("LoginViewModel line 38");
         const loginEmail = formData.email;
         const loginPassword = formData.password;
 
@@ -55,11 +60,24 @@ export default function LoginViewModel() {
         setLoginPassword(event.target.value);
     }
 
+    function onClickShowPassword() {
+        if (!passwordVisible) {
+            setPasswordType(InputType.TEXT);
+            setPasswordVisible(true);
+        } else {
+            setPasswordType(InputType.PASSWORD);
+            setPasswordVisible(false);
+        }
+    }
+
     return {
         onClickLogin,
         onChangeEmail,
         onChangePassword,
+        onClickShowPassword,
         initialValues,
-        validationSchema
+        validationSchema,
+        passwordVisible,
+        passwordType
     }
 }
