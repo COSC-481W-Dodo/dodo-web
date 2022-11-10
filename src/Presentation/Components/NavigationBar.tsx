@@ -15,7 +15,7 @@ function LogoutButton () {
     const navigate = useNavigate();
     const logoutFunction = async () => {await signOut(auth); navigate('/login');}
     return (
-        <button onClick={logoutFunction} />
+        <button onClick={logoutFunction}> Logout </button>
     )
 };
 
