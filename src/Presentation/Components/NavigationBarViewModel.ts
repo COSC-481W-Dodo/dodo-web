@@ -1,4 +1,4 @@
 
-export default function ViewAccountViewModel() {
-    
+export default function NavigationBarViewModel() {
+
 }

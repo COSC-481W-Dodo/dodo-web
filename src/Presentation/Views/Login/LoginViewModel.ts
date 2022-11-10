@@ -35,6 +35,7 @@ export default function LoginViewModel() {
     });
 
     async function onClickLogin(formData: NewUser) {
+        console.log("LoginViewModel line 38");
         const loginEmail = formData.email;
         const loginPassword = formData.password;
 

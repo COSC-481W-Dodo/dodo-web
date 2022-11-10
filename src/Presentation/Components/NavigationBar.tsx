@@ -3,17 +3,29 @@ import { Link, Outlet } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { auth } from "../../Data/DataSource/firebase";
+import { useNavigate } from 'react-router-dom';
 
 import './navigation-bar.css'
 
+// Logout button
+function LogoutButton () {
+    const navigate = useNavigate();
+    const logoutFunction = async () => {await signOut(auth); navigate('/login');}
+    return (
+        <button onClick={logoutFunction} />
+    )
+};
+
 function NavigationBar() {
+    // Construct Variables
     const [user, setUser] = useState({});
+
+    // Allows us to check if the user is logged in on refresh   
     React.useEffect(() => {
         onAuthStateChanged(auth, (currentUser: any) => {setUser(currentUser);})  
       },[]);
-      
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -30,6 +42,7 @@ function NavigationBar() {
                         <>
                         <Link to='/edit-account'>Edit Account</Link>
                         <Link to='/view-account'>View Account</Link>
+                        <LogoutButton />
                         </>
                         }
                     </Nav>
