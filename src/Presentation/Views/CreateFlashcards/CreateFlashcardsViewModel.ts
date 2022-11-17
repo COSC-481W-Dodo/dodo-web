@@ -17,7 +17,6 @@ export default function CreateFlashcardsViewModel() {
         if (remainingTags === 0 && remainingFlashcards === 0) {
             setIsLoading(false);
             alert("Card set has been saved");
-            window.location.reload();
         }
     }, [remainingTags, remainingFlashcards]);
 
@@ -50,63 +49,52 @@ export default function CreateFlashcardsViewModel() {
 
         // Filtering out tags to remove duplicates in the form
         tags.forEach(tag => {
-            let name = tag.tagName.trim().replace(/[\s\.\[\]\*`]+/g, " ").trim();
-            console.log(name);
-            console.log(name.length);
+
+            // Trimming unnecessary extra spaces
+            let name = tag.tagName.replace(/\s+/g, " ").trim();
             
             // Verify that name isn't a duplicate AND verify that name isn't only spaces or blank after regex and trimming
             if (uniqueTagNames.indexOf(name) === -1 && (name.search(/^\s+/g) !== 0 && name.length !== 0)) {
                 
                 // Call function to convert the given tag name to a readable id
                 let newId = generateReadableId(name);
-
-                console.log(newId);
                 
                 // If generated ID is empty
-                if (newId.length > 0 && uniqueTagIds.indexOf(newId) == -1) {
+                if (newId.length > 0 && uniqueTagIds.indexOf(newId) === -1) {
                     uniqueTagNames.push(name);
                     uniqueTagIds.push(newId);
                     newTags.push({ id: newId, tagName: name });
                 }
-            } else {
-                console.log("skipped tags")
             }
         });
-        
-        console.log("Tag Names:");
-        console.log(uniqueTagNames);
-        console.log("Tag IDs:");
-        console.log(uniqueTagIds);
-        console.log("New Tags:");
-        console.log(newTags);
         
 
         // Initializing remaining tags and flashcards
         setRemainingTags(newTags.length);
         setRemainingFlashcards(flashcards.length);
-        // setIsLoading(true);
+        setIsLoading(true);
 
-        // if (user !== null && user !== undefined) {
-        //     newTags.forEach(async (newTag) => {
-        //         try {
-        //             await CreateTagUseCase(newTag, user.uid).then(() => {
-        //                 setRemainingTags((remainingTags) => remainingTags - 1);
-        //             });
-        //         } catch(error: any) {
-        //             console.log(error);
-        //         }
-        //     });
+        if (user !== null && user !== undefined) {
+            newTags.forEach(async (newTag) => {
+                try {
+                    await CreateTagUseCase(newTag, user.uid).then(() => {
+                        setRemainingTags((remainingTags) => remainingTags - 1);
+                    });
+                } catch(error: any) {
+                    console.log(error);
+                }
+            });
     
-        //     flashcards.forEach(async (flashcard) => {
-        //         try {
-        //             await CreateFlashcardUseCase(flashcard, tagNames, user.uid).then(() => {
-        //                 setRemainingFlashcards((remainingFlashcards) => remainingFlashcards -1);
-        //             });
-        //         } catch(error: any) {
-        //             console.log(error);
-        //         }   
-        //     });
-        // }
+            flashcards.forEach(async (flashcard) => {
+                try {
+                    await CreateFlashcardUseCase(flashcard, uniqueTagIds, user.uid).then(() => {
+                        setRemainingFlashcards((remainingFlashcards) => remainingFlashcards -1);
+                    });
+                } catch(error: any) {
+                    console.log(error);
+                }   
+            });
+        }
     }
 
     function generateReadableId(name: string) {
@@ -129,16 +117,6 @@ export default function CreateFlashcardsViewModel() {
             event.preventDefault();
             return true;
         }
-
-        // Quick fix to prevent invalid characters from being uploaded to tag ids
-        // if (event.key === "/" || 
-        //     event.key === "." || 
-        //     event.key === "[" || 
-        //     event.key === "]" ||
-        //     event.key === "*" ||
-        //     event.key === "`") {
-        //     event.preventDefault();
-        // }
 
         return false;
     }
