@@ -1,6 +1,6 @@
 import { KeyboardEvent, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { FullCardSet } from '../../../Common/interfaces';
+import { FullCardSet, Tag } from '../../../Common/interfaces';
 import { CreateFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/CreateFlashcard';
 import { CreateTagUseCase } from '../../../Domain/UseCase/Tag/CreateTag';
 import { v4 as uuidv4 } from 'uuid';
@@ -44,41 +44,82 @@ export default function CreateFlashcardsViewModel() {
 
         const tags = data.tags;
         const flashcards = data.flashcards;
-        let tagNames = Array<string>();
+        let uniqueTagNames = Array<string>(); // keeps track of unique strings
+        let uniqueTagIds = Array<string>();
+        let newTags = Array<Tag>();
 
         // Filtering out tags to remove duplicates in the form
         tags.forEach(tag => {
-            if (tagNames.indexOf(tag.tagName) === -1) {
-                tagNames.push(tag.tagName);
+            let name = tag.tagName.trim().replace(/[\s\.\[\]\*`]+/g, " ").trim();
+            console.log(name);
+            console.log(name.length);
+            
+            // Verify that name isn't a duplicate AND verify that name isn't only spaces or blank after regex and trimming
+            if (uniqueTagNames.indexOf(name) === -1 && (name.search(/^\s+/g) !== 0 && name.length !== 0)) {
+                
+                // Call function to convert the given tag name to a readable id
+                let newId = generateReadableId(name);
+
+                console.log(newId);
+                
+                // If generated ID is empty
+                if (newId.length > 0 && uniqueTagIds.indexOf(newId) == -1) {
+                    uniqueTagNames.push(name);
+                    uniqueTagIds.push(newId);
+                    newTags.push({ id: newId, tagName: name });
+                }
+            } else {
+                console.log("skipped tags")
             }
         });
+        
+        console.log("Tag Names:");
+        console.log(uniqueTagNames);
+        console.log("Tag IDs:");
+        console.log(uniqueTagIds);
+        console.log("New Tags:");
+        console.log(newTags);
+        
 
         // Initializing remaining tags and flashcards
-        setRemainingTags(tagNames.length);
+        setRemainingTags(newTags.length);
         setRemainingFlashcards(flashcards.length);
-        setIsLoading(true);
+        // setIsLoading(true);
 
-        if (user !== null && user !== undefined) {
-            tagNames.forEach(async (tagName) => {
-                try {
-                    await CreateTagUseCase(tagName).then(() => {
-                        setRemainingTags((remainingTags) => remainingTags - 1);
-                    });
-                } catch(error: any) {
-                    console.log(error);
-                }
-            });
+        // if (user !== null && user !== undefined) {
+        //     newTags.forEach(async (newTag) => {
+        //         try {
+        //             await CreateTagUseCase(newTag, user.uid).then(() => {
+        //                 setRemainingTags((remainingTags) => remainingTags - 1);
+        //             });
+        //         } catch(error: any) {
+        //             console.log(error);
+        //         }
+        //     });
     
-            flashcards.forEach(async (flashcard) => {
-                try {
-                    await CreateFlashcardUseCase(flashcard, tagNames, user.uid).then(() => {
-                        setRemainingFlashcards((remainingFlashcards) => remainingFlashcards -1);
-                    });
-                } catch(error: any) {
-                    console.log(error);
-                }   
-            });
+        //     flashcards.forEach(async (flashcard) => {
+        //         try {
+        //             await CreateFlashcardUseCase(flashcard, tagNames, user.uid).then(() => {
+        //                 setRemainingFlashcards((remainingFlashcards) => remainingFlashcards -1);
+        //             });
+        //         } catch(error: any) {
+        //             console.log(error);
+        //         }   
+        //     });
+        // }
+    }
+
+    function generateReadableId(name: string) {
+
+        // Regex to remove the Firebase restricted characters from the new document ID
+        let id = name.replace(/[\s\.\[\]\*`\/\\]+/g, "-").toLowerCase();
+
+        // Verifies that the end of string to make sure there are no trailing dashes
+        if (id.charAt(id.length - 1) === '-') {
+            id = id.substring(0, id.length - 1);
         }
+
+        return id;
     }
 
     function onKeyDownPreventEnter(event: KeyboardEvent<Element>) {
@@ -90,14 +131,14 @@ export default function CreateFlashcardsViewModel() {
         }
 
         // Quick fix to prevent invalid characters from being uploaded to tag ids
-        if (event.key === "/" || 
-            event.key === "." || 
-            event.key === "[" || 
-            event.key === "]" ||
-            event.key === "*" ||
-            event.key === "`") {
-            event.preventDefault();
-        }
+        // if (event.key === "/" || 
+        //     event.key === "." || 
+        //     event.key === "[" || 
+        //     event.key === "]" ||
+        //     event.key === "*" ||
+        //     event.key === "`") {
+        //     event.preventDefault();
+        // }
 
         return false;
     }
