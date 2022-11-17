@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { auth } from '../../../Data/DataSource/firebase';
 
 import './create-flashcards.css';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import Loading from '../../Components/Loading/Loading';
 
 function CreateFlashcards() {
