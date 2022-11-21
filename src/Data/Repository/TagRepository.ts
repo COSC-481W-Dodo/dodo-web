@@ -1,4 +1,4 @@
-import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, doc, setDoc, updateDoc, query, where, collection, getDocs } from 'firebase/firestore';
 import { Tag } from '../../Common/interfaces';
 import { db } from '../DataSource/firebase';
 
@@ -26,5 +26,17 @@ export async function createTag(newTag: Tag, userId: string) {
         }
     }
 
+    return result;
+}
+
+export async function getAllTags() {
+    const q = query(collection(db, "tags"));
+    const result = await getDocs(q);
+    return result;
+}
+
+export async function getTagsByCurrentUser(userId: string) {
+    const q = query(collection(db, "tags"), where("authors", 'array-contains', userId));
+    const result = await getDocs(q);
     return result;
 }
