@@ -8,6 +8,7 @@ import Registration from './Presentation/Views/Registration/Registration';
 import EditAccount from './Presentation/Views/EditAccount/EditAccount';
 import ViewAccount from './Presentation/Views/ViewAccount/ViewAccount';
 import CreateFlashcards from './Presentation/Views/CreateFlashcards/CreateFlashcards';
+import ViewFlashcards from './Presentation/Views/ViewFlashcards/ViewFlashcards';
 
 // Styling
 import './App.css';
@@ -25,6 +26,7 @@ function App() {
             <Route path='/edit-account' element={ <EditAccount /> } />
             <Route path='/view-account' element={ <ViewAccount /> } />
             <Route path='/create-flashcards' element={ <CreateFlashcards />} />
+            <Route path='/view-flashcards' element={ <ViewFlashcards /> } />
           </Route>
         </Routes>
       </BrowserRouter>

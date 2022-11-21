@@ -1,6 +1,7 @@
 import { db } from '../DataSource/firebase';
 import { doc, setDoc} from 'firebase/firestore';
 import { Card } from '../../Common/interfaces';
+import { query, where, collection, getDocs } from 'firebase/firestore';
 
 export async function createFlashcard(flashcard: Card, tagNames: Array<String>, userId: string) {
 
@@ -11,5 +12,23 @@ export async function createFlashcard(flashcard: Card, tagNames: Array<String>, 
         userId: userId
     });
 
+    return result;
+}
+
+export async function getFlashcardsByCurrentUser(userId: string) {
+    const q = query(collection(db, "flashcards"), where("userId", '==', userId));
+    const result = await getDocs(q);
+    return result;
+}
+
+export async function getFlashcardsByCurrentUserAndTags(userId: string, tagsSelected: Array<string>) {
+    const q = query(collection(db, "flashcards"), where("userId", '==', userId), where("tags", "array-contains", tagsSelected));
+    const result = await getDocs(q);
+    return result;
+}
+
+export async function getFlashcardsByTags(tagsSelected: Array<string>) {
+    const q = query(collection(db, "flashcards"), where("tags", "array-contains", tagsSelected));
+    const result = await getDocs(q);
     return result;
 }

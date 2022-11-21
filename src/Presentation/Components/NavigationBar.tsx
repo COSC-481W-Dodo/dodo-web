@@ -7,6 +7,10 @@ import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { auth } from "../../Data/DataSource/firebase";
 import { useNavigate } from 'react-router-dom';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import StyleIcon from '@mui/icons-material/Style';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from '@mui/icons-material/Home';
 import './navigation-bar.css';
 
 
@@ -36,7 +40,7 @@ function NavigationBar() {
                 <Container>
                     <Navbar.Brand><Link to='/'>Dodo</Link></Navbar.Brand>
                     <Nav>
-                        <Link to='/'>Home</Link>
+                        <Link to='/'> <HomeIcon /> Home</Link>
 
                         { auth.currentUser === null ?
                             <>
@@ -45,8 +49,9 @@ function NavigationBar() {
                             </> :
                             <>
                                 <Link to='/create-flashcards'> <LibraryAddIcon className='card-add'/> Create </Link>
-                                <Link to='/edit-account'>Edit Account</Link>
-                                <Link to='/view-account'>View Account</Link>
+                                <Link to='/view-flashcards'> <StyleIcon /> Cards</Link>
+                                <Link to='/edit-account'> <ManageAccountsIcon /> Edit Account</Link>
+                                <Link to='/view-account'> <AccountCircleIcon /> View Account</Link>
                                 <LogoutButton />
                             </>
                         }
