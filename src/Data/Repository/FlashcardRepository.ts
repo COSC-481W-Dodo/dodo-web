@@ -22,13 +22,13 @@ export async function getFlashcardsByCurrentUser(userId: string) {
 }
 
 export async function getFlashcardsByCurrentUserAndTags(userId: string, tagsSelected: Array<string>) {
-    const q = query(collection(db, "flashcards"), where("userId", '==', userId), where("tags", "array-contains", tagsSelected));
+    const q = query(collection(db, "flashcards"), where("userId", '==', userId), where("tags", "array-contains-any", tagsSelected));
     const result = await getDocs(q);
     return result;
 }
 
 export async function getFlashcardsByTags(tagsSelected: Array<string>) {
-    const q = query(collection(db, "flashcards"), where("tags", "array-contains", tagsSelected));
+    const q = query(collection(db, "flashcards"), where("tags", "array-contains-any", tagsSelected));
     const result = await getDocs(q);
     return result;
 }
