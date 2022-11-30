@@ -23,11 +23,12 @@ export interface FlashcardDatabase {
 }
 
 export interface TagDatabase {
+    id: string;
     authors: Array<string>;
     name: string;
 }
 
-export interface FilterFlashcardData {
+export interface TagsFormData {
     showOnlyCurrentUser: boolean;
     selected: Array<string>;
 }
