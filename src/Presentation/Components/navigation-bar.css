@@ -3,14 +3,16 @@
 }
 
 nav a {
-    text-decoration: none;
-    color: white;
+    color: #6750a4 !important;
+    margin-left: 0.25em !important;
 }
 
 nav a:hover {
     color: white;
 }
-
-.card-add{
-    color: #e7e0eb;
+.nav-background {
+    background-color: #e9ddff !important;
+}
+.icon-color{
+    color: #6750a4;
 }

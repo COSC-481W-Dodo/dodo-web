@@ -1,13 +1,20 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { auth } from "../../Data/DataSource/firebase";
 import { useNavigate } from 'react-router-dom';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import CreateIcon from '@mui/icons-material/Create';
 import './navigation-bar.css';
+import { NavDropdown } from 'react-bootstrap';
 
 
 // Logout button
@@ -15,7 +22,7 @@ function LogoutButton () {
     const navigate = useNavigate();
     const logoutFunction = async () => {await signOut(auth); navigate('/login');}
     return (
-        <button onClick={logoutFunction}> Logout </button>
+        <Link to='' onClick={logoutFunction} className='nav-link'><LogoutIcon className='icon-color'/> Logout</Link>
     )
 };
 
@@ -32,21 +39,21 @@ function NavigationBar() {
 
     return (
         <>
-            <Navbar bg="dark" variant="dark">
+            <Navbar className='nav-background'>
                 <Container>
                     <Navbar.Brand><Link to='/'>Dodo</Link></Navbar.Brand>
                     <Nav>
-                        <Link to='/'>Home</Link>
-
                         { auth.currentUser === null ?
                             <>
-                                <Link to='/login'>Login</Link>
-                                <Link to='/registration'>Registration</Link>
+                                <Link to='/login' className='nav-link'><LoginIcon className='icon-color'/> Login</Link>
+                                <Link to='/registration' className='nav-link'><CreateIcon className='icon-color'/> Registration</Link>
                             </> :
                             <>
-                                <Link to='/create-flashcards'> <LibraryAddIcon className='card-add'/> Create </Link>
-                                <Link to='/edit-account'>Edit Account</Link>
-                                <Link to='/view-account'>View Account</Link>
+                                <Link to='/create-flashcards' className='nav-link'><LibraryAddIcon className='icon-color'/> Create</Link>
+                                <NavDropdown title="Account" id="basic-nav-dropdown">
+                                    <NavDropdown.Item href="/view-account">View Account</NavDropdown.Item>
+                                    <NavDropdown.Item href="/edit-account">Edit Account</NavDropdown.Item>
+                                </NavDropdown>
                                 <LogoutButton />
                             </>
                         }
