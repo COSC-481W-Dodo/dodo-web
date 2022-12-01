@@ -47,19 +47,19 @@ function ViewFlashcards() {
                         {({ values, setFieldValue,  }) => (
                             <Form>
                                 <label>
-                                    <Field type='checkbox' name='showOnlyCurrentUser' onClick={onClickFilterTags} />
+                                    <Field type='checkbox' name='showOnlyCurrentUser' onClick={(e: any) => onClickFilterTags(e, values)} />
                                     <span>Only my cards</span>
                                 </label>
                                 <hr />
 
                                 <div id='select-tags-group'>Tags</div>
-                                <div role='group' aria-labelledby='select-tags-group'>
+                                <div ref={checkboxInputs} role='group' aria-labelledby='select-tags-group'>
                                     {
                                         tags.map((tag, index) => {
                                             return (
                                                 <div key={tag.id}>
                                                     <label>
-                                                        <Field type='checkbox' name='selected' value={tag.id} onClick={(e: any) => onClickToggleSelectTag(e, tag)} />
+                                                        <Field id={tag.id} type='checkbox' name='selected' value={tag.id} onClick={(e: any) => onClickToggleSelectTag(e, tag)} />
                                                         <span> { tag.name } </span>
                                                     </label>
                                                 </div>
