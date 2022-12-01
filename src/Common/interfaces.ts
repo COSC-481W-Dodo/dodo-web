@@ -7,28 +7,17 @@ export interface Card {
     id: string;
     question: string;
     answer: string;
+    userId?: string;
+    tags?: Array<string>;
 }
 
 export interface Tag {
     id: string;
-    tagName: string;
-}
-
-export interface FlashcardDatabase {
-    id: string
-    question: string;
-    answer: string;
-    userId: string;
-    tags: Array<string>;
-}
-
-export interface TagDatabase {
-    id: string;
-    authors: Array<string>;
     name: string;
+    authors?: Array<string>
 }
 
-export interface TagsFormData {
+export interface FilterForm {
     showOnlyCurrentUser: boolean;
     selected: Array<string>;
 }

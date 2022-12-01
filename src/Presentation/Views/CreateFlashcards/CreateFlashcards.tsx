@@ -77,7 +77,7 @@ function CreateFlashcards() {
                                                                 className={ getIn(errors, `tags.[${index}]`) ? "m-3 tag-input tag-error" : "m-3 tag-input" }
                                                                 role="textbox"
                                                                 onKeyDown={onKeyDownPreventEnter}
-                                                                onInput={(e) => setFieldValue(`tags.[${index}].tagName`, e.currentTarget.innerText)}
+                                                                onInput={(e) => setFieldValue(`tags.[${index}].name`, e.currentTarget.innerText)}
                                                             ></span>
 
                                                             <button className='remove-tag' disabled={ tags.length > 1 ? false : true } onClick={() => arrayHelpers.remove(index)}>
@@ -88,7 +88,7 @@ function CreateFlashcards() {
                                                         </div>
                                                     ))}
                                                     <div className='add-tag-area'>
-                                                        <button className='add-tag' onClick={() => arrayHelpers.push({ id: uuidv4(), tagName: "" })}>
+                                                        <button className='add-tag' onClick={() => arrayHelpers.push({ id: uuidv4(), name: "" })}>
                                                             <AddCircleIcon />
                                                         </button>
                                                     </div>
