@@ -24,7 +24,7 @@ export default function ViewFlashcardsViewModel() {
         showOnlyCurrentUser: true,
         selected: []
     });
-    const checkboxInputs = useRef<Array<HTMLInputElement>>([]);
+    const checkboxInputs = useRef<HTMLDivElement>(null);
 
     const validationSchema = Yup.object().shape({
         showOnlyCurrentUser: Yup.boolean(),
@@ -164,26 +164,24 @@ export default function ViewFlashcardsViewModel() {
         return false;
     }
 
-    function onClickFilterTags(event: MouseEvent<HTMLInputElement>) {
+    function onClickFilterTags(event: MouseEvent<HTMLInputElement>, values: FilterForm) {
         console.log(currentTagNames.current);
         if (event.currentTarget.checked) {
             console.log(selectedTagIds.current);
+            
             tags.map((tag, index) => {
                 if (!containsTag(tag)) {
+                    // deselect tag from the form that isn't a user tag
+                    values.selected = values.selected.filter((selectedTagId) => selectedTagId !== tag.id);
+                    // removes 
                     selectedTagNames.current = selectedTagNames.current.filter((selectedTag) => selectedTag !== tag.name)
-                    selectedTagIds.current = selectedTagIds.current.filter((selectedTag) => selectedTag !== tag.id)
                 }
+                return null;
             });
-            console.log(selectedTagIds.current);
-            showOnlyUser.current = true;
             setTags(userTags);
-            // TODO: unselect tags not used by the current user
         } else {
-            showOnlyUser.current = false;
-            
             setTags(allTags);
         }
-        setInitialValues({showOnlyCurrentUser: showOnlyUser.current, selected: selectedTagIds.current});
         console.log(currentTagNames.current);
     }
 
@@ -195,21 +193,12 @@ export default function ViewFlashcardsViewModel() {
             if (!selectedTagNames.current.includes(tag.name)) {
                 selectedTagNames.current.push(tag.name);
             }
-
-            if (!selectedTagIds.current.includes(tag.id)) {
-                selectedTagIds.current.push(tag.id);
-            }
             
         } else {
             console.log("I am UNchecked");
             selectedTagNames.current = selectedTagNames.current.filter((selectedTag) => selectedTag !== tag.name);
-            selectedTagIds.current = selectedTagIds.current.filter((selectedTag) => selectedTag !== tag.id);
             
         }
-
-        setInitialValues(previousState => {
-            return { ...previousState, selected: selectedTagIds.current }
-        })
         console.log(selectedTagNames.current);
         console.log(currentTagNames.current);
     }
