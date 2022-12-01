@@ -1,4 +1,4 @@
-import { arrayUnion, doc, setDoc, updateDoc, query, where, collection, getDocs } from 'firebase/firestore';
+import { arrayUnion, doc, setDoc, updateDoc, query, where, collection, getDocs, orderBy } from 'firebase/firestore';
 import { Tag } from '../../Common/interfaces';
 import { db } from '../DataSource/firebase';
 
@@ -19,7 +19,7 @@ export async function createTag(newTag: Tag, userId: string) {
         // There was no document to update so we create a new one
         if (error.code === "not-found") {
             data = {
-                name: newTag.tagName,
+                name: newTag.name,
                 authors: arrayUnion(userId) 
             }
             result = await setDoc(tagDocRef, data);
@@ -30,13 +30,13 @@ export async function createTag(newTag: Tag, userId: string) {
 }
 
 export async function getAllTags() {
-    const q = query(collection(db, "tags"));
+    const q = query(collection(db, "tags"), orderBy("name"));
     const result = await getDocs(q);
     return result;
 }
 
 export async function getTagsByCurrentUser(userId: string) {
-    const q = query(collection(db, "tags"), where("authors", 'array-contains', userId));
+    const q = query(collection(db, "tags"), where("authors", 'array-contains', userId), orderBy("name"));
     const result = await getDocs(q);
     return result;
 }

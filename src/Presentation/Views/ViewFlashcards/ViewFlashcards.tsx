@@ -1,6 +1,6 @@
 import useViewModel from './ViewFlashcardsViewModel';
-import { useEffect, useRef } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { forwardRef, useEffect, useRef } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from "../../../Data/DataSource/firebase";
 
@@ -10,8 +10,11 @@ function ViewFlashcards() {
         flashcards,
         tags,
         initialValues,
-        selectedTags,
-        showOnlyCurrentUser,
+        validationSchema,
+        currentTagNames,
+        checkboxInputs,
+        onClickToggleSelectTag,
+        onClickFilterTags,
         onClickHandleFilters,
         onLoadInitializeFlashcardsAndTags
     } = useViewModel();
@@ -27,8 +30,10 @@ function ViewFlashcards() {
         });
     }, []); 
 
+    // const CheckboxInput = forwardRef<HTMLInputElement>((props, ref) => {})
+
     return (
-        <div>
+        <div className='container'>
             <div className='row border'>
                 <div className='col border'>
                     {/* Tag Filters */}
@@ -36,12 +41,13 @@ function ViewFlashcards() {
                     <Formik
                         enableReinitialize={true}
                         initialValues={initialValues}
+                        validationSchema={validationSchema}
                         onSubmit={onClickHandleFilters}
                     >
-                        {({ values }) => (
+                        {({ values, setFieldValue,  }) => (
                             <Form>
                                 <label>
-                                    <Field type='checkbox' name='showOnlyCurrentUser'/>
+                                    <Field type='checkbox' name='showOnlyCurrentUser' onClick={onClickFilterTags} />
                                     <span>Only my cards</span>
                                 </label>
                                 <hr />
@@ -52,8 +58,8 @@ function ViewFlashcards() {
                                         tags.map((tag, index) => {
                                             return (
                                                 <div key={tag.id}>
-                                                    <label >
-                                                        <Field type='checkbox' name='selected' value={tag.id} />
+                                                    <label>
+                                                        <Field type='checkbox' name='selected' value={tag.id} onClick={(e: any) => onClickToggleSelectTag(e, tag)} />
                                                         <span> { tag.name } </span>
                                                     </label>
                                                 </div>
@@ -68,8 +74,10 @@ function ViewFlashcards() {
                                 </label>
 
                                 <div className='container text-center mb-3'>
-                                <button type='submit' className='btn btn-success'>Apply Filters</button>
-                            </div>
+                                    
+                                    <button type='submit' className='btn btn-success'>Apply Filters</button>
+                                    <ErrorMessage name='selected' render={message => <div className='text-danger'>{message}</div>} />
+                                </div>
                             </Form>
                         )}
                         
@@ -82,6 +90,13 @@ function ViewFlashcards() {
                         <div className='col border'>
                             {/* Selected Tags */}
                             <h1>Selected Tags</h1>
+                            {
+                                currentTagNames.current.map((currentTagName, index) => {
+                                    return (
+                                        <span key={index} className='p-3'> { currentTagName } </span>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
 
