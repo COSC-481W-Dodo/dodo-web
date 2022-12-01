@@ -1,8 +1,12 @@
 import useViewModel from './ViewFlashcardsViewModel';
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from "../../../Data/DataSource/firebase";
+import Carousel from 'react-bootstrap/Carousel';
+import Card from '@mui/material/Card';
+
+import './view-flashcards.css';
 
 function ViewFlashcards() {
 
@@ -13,12 +17,15 @@ function ViewFlashcards() {
         validationSchema,
         currentTagNames,
         checkboxInputs,
+        carouselIndex,
+        onSelectNextCard,
         onClickToggleSelectTag,
         onClickFilterTags,
         onClickHandleFilters,
         onLoadInitializeFlashcardsAndTags
     } = useViewModel();
 
+    // Carousel Function
     const authFlag = useRef(true); 
 
     useEffect(() => {
@@ -30,13 +37,12 @@ function ViewFlashcards() {
         });
     }, []); 
 
-    // const CheckboxInput = forwardRef<HTMLInputElement>((props, ref) => {})
-
     return (
         <div className='container'>
             <div className='row border'>
                 <div className='col border'>
                     {/* Tag Filters */}
+                    {/* TODO make into it's own component */}
                     <h1>Filters</h1>
                     <Formik
                         enableReinitialize={true}
@@ -44,11 +50,11 @@ function ViewFlashcards() {
                         validationSchema={validationSchema}
                         onSubmit={onClickHandleFilters}
                     >
-                        {({ values, setFieldValue,  }) => (
+                        {({ values }) => (
                             <Form>
                                 <label>
                                     <Field type='checkbox' name='showOnlyCurrentUser' onClick={(e: any) => onClickFilterTags(e, values)} />
-                                    <span>Only my cards</span>
+                                    <span> Only my cards</span>
                                 </label>
                                 <hr />
 
@@ -88,12 +94,12 @@ function ViewFlashcards() {
 
                     <div className='row border'>
                         <div className='col border'>
-                            {/* Selected Tags */}
-                            <h1>Selected Tags</h1>
+                            {/* TODO make into its own component */}
+                            <h1>Categories</h1>
                             {
                                 currentTagNames.current.map((currentTagName, index) => {
                                     return (
-                                        <span key={index} className='p-3'> { currentTagName } </span>
+                                        <span key={index} className='current-tag'> { currentTagName } </span>
                                     )
                                 })
                             }
@@ -102,8 +108,26 @@ function ViewFlashcards() {
 
                     <div className='row border'>
                         <div className='col border'>
+                            {/* TODO make into its own componenet */}
                             {/* Flashcard carousel */}
-                            <h1>Flashcard carousel</h1>
+                            <Carousel indicators={false} interval={null} activeIndex={carouselIndex} onSelect={onSelectNextCard}>
+                                {
+                                    // display each flashcard
+                                    flashcards.map((flashcard, index) => {
+                                        return (
+                                            <Carousel.Item>
+                                                <Card className='view-cards flashcard-carousel'>
+                                                    <div className='flashcard-carousel-text'> 
+                                                        <p>{ flashcard.question }</p>
+                                                        {/* <h3>{ flashcard.answer }</h3> */}
+                                                    </div>
+                                                </Card>
+                                            </Carousel.Item>
+                                            
+                                        );
+                                    })
+                                }
+                            </Carousel>
                         </div>
                     </div>
 
@@ -111,15 +135,15 @@ function ViewFlashcards() {
                     <div className='row border'>
                         <div className='col border'>
                             {/* Flashcard */}
+                            {/* TODO make into its own component */}
                             <h1>Start of flashcards</h1>
                             {
                                 flashcards.map((flashcard, index) => {
                                     return (
-                                        <div className='border' key={flashcard.id}>
-                                            <p>{ flashcard.question }</p>
-                                            <p>{ flashcard.answer }</p>
-                                            <p>{ flashcard.tags }</p>
-                                        </div>
+                                        <Card className='m-2 row view-cards' key={flashcard.id}>
+                                            <p className='p-3 col-5 question-section'>{ flashcard.question }</p>
+                                            <p className='p-3 col-7 answer-section'>{ flashcard.answer }</p>
+                                        </Card>
                                     );
                                 })
                             }

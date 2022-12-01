@@ -12,6 +12,8 @@ import { GetFlashcardsByTagsUseCase } from '../../../Domain/UseCase/Flashcard/Ge
 import * as Yup from 'yup';
 
 export default function ViewFlashcardsViewModel() {
+    const [carouselIndex, setCarouselIndex] = useState(0);
+    const [showAnswer, setShowAnswer] = useState<Array<boolean>>([]);
     const [flashcards, setFlashcards] = useState<Array<Card>>([]);
     const [tags, setTags] = useState<Array<Tag>>([]);
     const [allTags, setAllTags] = useState<Array<Tag>>([]);
@@ -25,6 +27,10 @@ export default function ViewFlashcardsViewModel() {
         selected: []
     });
     const checkboxInputs = useRef<HTMLDivElement>(null);
+
+    function onSelectNextCard(selectedIndex: number) {
+        setCarouselIndex(selectedIndex);
+    };
 
     const validationSchema = Yup.object().shape({
         showOnlyCurrentUser: Yup.boolean(),
@@ -287,6 +293,8 @@ export default function ViewFlashcardsViewModel() {
         validationSchema,
         currentTagNames,
         checkboxInputs,
+        carouselIndex,
+        onSelectNextCard,
         onClickToggleSelectTag,
         onClickFilterTags,
         onClickHandleFilters,
