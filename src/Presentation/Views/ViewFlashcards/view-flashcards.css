@@ -1,0 +1,46 @@
+.current-tag {
+    display: inline-block;
+    color: white;
+    font-weight: bold;
+    background-color: #6750a4;
+    border-radius: 15px;
+    padding: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 5px;
+    text-align: center;
+}
+
+.question-section {
+    border-right: 2px solid black;
+}
+
+.answer-section, .question-section {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.view-cards {
+    background-color: #e7e0eb !important;
+}
+
+.flashcard-carousel {
+    margin: 10px;
+    height: 200px;
+}
+
+.flashcard-carousel-text{
+    text-align: center;
+    height: 200px;
+    position: relative;
+}
+
+.flashcard-carousel-text p {
+    font-size: 25px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
