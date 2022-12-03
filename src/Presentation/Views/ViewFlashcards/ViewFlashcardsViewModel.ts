@@ -23,10 +23,11 @@ export default function ViewFlashcardsViewModel() {
     const selectedTagNames = useRef<Array<string>>([]); // Keeps track of tag names selected in the filter section
     const currentTagNames = useRef<Array<string>>([]);  // Keeps track of tag names before new selections
     const [initialValues, setInitialValues] = useState<FilterForm>({
-        showOnlyCurrentUser: true,
-        selected: []
+        showOnlyCurrentUser: showOnlyUser.current,
+        selected: selectedTagIds.current
     });
     const checkboxInputs = useRef<HTMLDivElement>(null);
+    const [showFilterSettings, setShowFilterSettings] = useState(false);
 
     function onSelectNextCard(selectedIndex: number) {
         setCarouselIndex(selectedIndex);
@@ -184,8 +185,10 @@ export default function ViewFlashcardsViewModel() {
                 }
                 return null;
             });
+            showOnlyUser.current = true;
             setTags(userTags);
         } else {
+            showOnlyUser.current = false;
             setTags(allTags);
         }
         console.log(currentTagNames.current);
@@ -229,6 +232,8 @@ export default function ViewFlashcardsViewModel() {
             } else if (showOnlyUser.current && selectedTagIds.current.length === 0) {
                 getFlashcardsByCurrentUser();
             }
+
+            setInitialValues()
         }
     }
 
@@ -237,12 +242,12 @@ export default function ViewFlashcardsViewModel() {
             try {
                 await GetFlashcardsByCurrentUserAndTagsUseCase(auth.currentUser.uid, selectedTagIds.current).then((response) => {
                     response.forEach((doc: DocumentData) => {
-                    // console.log(doc.data());
-                    setFlashcards(prevFlashcards => [
-                        ...prevFlashcards,
-                        { id: doc.id, ...doc.data() }
-                    ]);
-                });
+                        // console.log(doc.data());
+                        setFlashcards(prevFlashcards => [
+                            ...prevFlashcards,
+                            { id: doc.id, ...doc.data() }
+                        ]);
+                    });
                 });
             } catch (error: any) {
                 console.log(error);
@@ -286,6 +291,16 @@ export default function ViewFlashcardsViewModel() {
         }
     }
 
+    function onClickHandleShowFilterSettings() {
+        setShowFilterSettings(true);
+        console.log(tags);
+    }
+
+    function onClickHandleCloseFilterSettings() {
+        setShowFilterSettings(false);
+        console.log(tags);
+    }
+
     return {
         flashcards,
         tags,
@@ -294,6 +309,9 @@ export default function ViewFlashcardsViewModel() {
         currentTagNames,
         checkboxInputs,
         carouselIndex,
+        showFilterSettings,
+        onClickHandleShowFilterSettings,
+        onClickHandleCloseFilterSettings,
         onSelectNextCard,
         onClickToggleSelectTag,
         onClickFilterTags,
