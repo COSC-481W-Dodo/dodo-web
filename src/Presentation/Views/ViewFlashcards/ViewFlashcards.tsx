@@ -25,8 +25,10 @@ function ViewFlashcards() {
         currentTagNames,
         checkboxInputs,
         carouselIndex,
+        editMode,
         showFilterSettings,
         onClickEnterEditCardMode,
+        onKeyDownSaveChanges,
         showDeleteModal,
         handleShowDeleteModal,
         handleCloseDeleteModal,
@@ -201,9 +203,34 @@ function ViewFlashcards() {
                                             if (flashcard.userId === auth.currentUser?.uid) {
                                                 return (
                                                     <div className='m-2 row view-cards' key={flashcard.id}>
-                                                        <p className='p-3 col-5 question-section'>{ flashcard.question }</p>
-                                                        <p className='p-3 col-5 answer-section'>{ flashcard.answer }</p>
-                                                        <p className='p-3 col-1 edit-icon' onClick={onClickEnterEditCardMode}><EditIcon /></p>
+                                                        {
+                                                            !editMode[index] ?
+                                                            <>
+                                                                <p className='p-3 col-5 question-section'>{ flashcard.question }</p>
+                                                                <p className='p-3 col-5 answer-section'>{ flashcard.answer }</p>
+                                                            </> :
+                                                            <>
+                                                                <div className='p-3 col-5'>
+                                                                    <span
+                                                                        contentEditable
+                                                                        className='m-3 flashcard-input flashcard-question' 
+                                                                        role="textbox"
+                                                                        onKeyDown={(e) => onKeyDownSaveChanges(e, index, flashcard.id)}
+                                                                    >{flashcard.question}</span>
+                                                                </div>
+
+                                                                <div className='p-3 col-5'>
+                                                                    <span
+                                                                        contentEditable
+                                                                        className='m-3 flashcard-input flashcard-answer' 
+                                                                        role="textbox"
+                                                                        onKeyDown={(e) => onKeyDownSaveChanges(e, index, flashcard.id)}
+                                                                    >{flashcard.answer}</span>
+                                                                </div>
+                                                            </>
+                                                        }
+                                                        
+                                                        <p className='p-3 col-1 edit-icon' onClick={() => onClickEnterEditCardMode(index, flashcard.id)}><EditIcon /></p>
                                                         <p className='p-3 col-1 delete-card-icon' onClick={() => handleShowDeleteModal(flashcard.id)}><DeleteIcon /></p>
                                                     </div>
                                                 );

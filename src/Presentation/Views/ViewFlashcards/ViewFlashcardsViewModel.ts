@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, MouseEvent } from 'react';
+import { useEffect, useState, useRef, MouseEvent, KeyboardEvent } from 'react';
 import { Card, Tag, FilterForm } from '../../../Common/interfaces';
 import { auth } from '../../../Data/DataSource/firebase';
 import { DocumentData } from 'firebase/firestore';
@@ -32,6 +32,7 @@ export default function ViewFlashcardsViewModel() {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [currentFlashcardFocus, setCurrentFlashcardFocus] = useState("");
+    const [editMode, setEditMode] = useState<Array<boolean>>([]);
 
     function onSelectNextCard(selectedIndex: number) {
         setCarouselIndex(selectedIndex);
@@ -51,6 +52,7 @@ export default function ViewFlashcardsViewModel() {
 
         if (auth.currentUser) {
             setFlashcards([]);
+            setEditMode([]);
 
             if (sessionStorage.getItem("showOnlyCurrentUser") !== null) {
                 
@@ -249,6 +251,8 @@ export default function ViewFlashcardsViewModel() {
                             ...prevFlashcards,
                             { id: doc.id, ...doc.data() }
                         ]);
+
+                        initializeEditModes()
                     });
                 });
             } catch (error: any) {
@@ -266,6 +270,8 @@ export default function ViewFlashcardsViewModel() {
                         ...prevFlashcards,
                         { id: doc.id, ...doc.data() }
                     ]);
+
+                    initializeEditModes()
                 });
             });
         } catch (error: any) {
@@ -284,6 +290,8 @@ export default function ViewFlashcardsViewModel() {
                             ...prevFlashcards,
                             { id: doc.id, ...doc.data() }
                         ]);
+
+                        initializeEditModes()
                     });
                 });
                 
@@ -291,6 +299,13 @@ export default function ViewFlashcardsViewModel() {
                 console.log(error);
             }
         }
+    }
+
+    function initializeEditModes() {
+        setEditMode(prevEditModes => [
+            ...prevEditModes,
+            false
+        ]);
     }
 
     function onClickHandleShowFilterSettings() {
@@ -303,12 +318,27 @@ export default function ViewFlashcardsViewModel() {
         console.log(tags);
     }
 
-    function onClickEnterEditCardMode() {
+    function onClickEnterEditCardMode(index: number, flashcardId: string) {
+        let newEditModes = [...editMode];
+        newEditModes[index] = true;
+        setEditMode(newEditModes);
+    }
+
+    function exitEditMode(index: number) {
+        let newEditModes = [...editMode];
+        newEditModes[index] = false;
+        setEditMode(newEditModes);
+    }
+
+
+    function saveChanges(index: number, flashcardId: string) {
 
     }
 
-    function onClickExitEditCardMode() {
-
+    function onKeyDownSaveChanges(event: KeyboardEvent<Element>, index: number, flashcardId: string) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+        }
     }
 
     function handleShowDeleteModal(flashcardId: string) {
@@ -345,8 +375,10 @@ export default function ViewFlashcardsViewModel() {
         carouselIndex,
         showFilterSettings,
         onClickEnterEditCardMode,
+        editMode,
         showDeleteModal,
         handleShowDeleteModal,
+        onKeyDownSaveChanges,
         handleCloseDeleteModal,
         onClickDeleteFlashcard,
         onClickHandleShowFilterSettings,
