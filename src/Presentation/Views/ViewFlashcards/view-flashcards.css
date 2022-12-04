@@ -20,10 +20,6 @@
     margin-bottom: 10px !important;
 }
 
-.flashcard-carousel {
-    
-}
-
 .flashcard-carousel-text {
     text-align: center;
     height: 200px;
@@ -36,7 +32,7 @@
     box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
 }
 
-.flashcard {
+.flashcard-view {
     background-color: #e7e0eb !important;
     margin: 10px;
     height: 400px;
@@ -56,19 +52,19 @@
     font-size: large;
 }
 
-.flashcard.flip{
+.flashcard-view.flip{
     --rotate-y: 180deg;
 }
 
-.flashcard .front,
-.flashcard .back {
+.flashcard-view .front,
+.flashcard-view .back {
     font-size: 25px;
     font-weight: bold;
     position: absolute;
     backface-visibility: hidden;
 }
 
-.flashcard .back{
+.flashcard-view .back{
     transform: rotateY(180deg);
 }
 

@@ -1,5 +1,6 @@
 import useViewModel from './ViewFlashcardsViewModel';
 import { forwardRef, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from "../../../Data/DataSource/firebase";
@@ -37,12 +38,20 @@ function ViewFlashcards() {
     //Flip Function
     const [flip, setFlip] = useState(false);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         onAuthStateChanged(auth, (currentUser) =>  {
             if (currentUser !== null && authFlag.current) {
                 onLoadInitializeFlashcardsAndTags();
                 authFlag.current = false;
             }
+
+            // Redirects to the log in page if not logged in
+            if (currentUser === null && currentUser !== undefined) {
+                navigate("/login");
+            }
+            
         });
     }, []); 
 
@@ -136,7 +145,7 @@ function ViewFlashcards() {
                                     flashcards.map((flashcard, index) => {
                                         return (
                                             <Carousel.Item>
-                                                <div className={`flashcard view-cards ${flip ? 'flip' : ''}`} onClick={() => setFlip(!flip)}>
+                                                <div className={`flashcard-view view-cards ${flip ? 'flip' : ''}`} onClick={() => setFlip(!flip)}>
                                                     <div className="front">
                                                         <p className='text-center'>{flashcard.question}</p>
                                                     </div>

@@ -109,7 +109,7 @@ function CreateFlashcards() {
                                         <div className='flashcard-section'>
                                             {(flashcards && flashcards.length > 0) && (
                                                 flashcards.map((flashcard: Card, index: number) => (
-                                                    <div className='flashcard container mx-auto' key={flashcard.id}>
+                                                    <div className='flashcard-create container mx-auto' key={flashcard.id}>
 
                                                         {/* Card Options */}
                                                         <div className='row top-card-options ms-2 me-2'>
