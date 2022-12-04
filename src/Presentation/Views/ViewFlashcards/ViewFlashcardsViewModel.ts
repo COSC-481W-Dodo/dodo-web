@@ -8,6 +8,7 @@ import { GetAllTagsUseCase } from '../../../Domain/UseCase/Tag/GetAllTags';
 import { GetFlashcardsByCurrentUserUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByCurrentUser';
 import { GetFlashcardsByCurrentUserAndTagsUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByCurrentUserAndTags';
 import { GetFlashcardsByTagsUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByTags';
+import { DeleteFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/DeleteFlashcard';
 
 import * as Yup from 'yup';
 
@@ -28,6 +29,9 @@ export default function ViewFlashcardsViewModel() {
     });
     const checkboxInputs = useRef<HTMLDivElement>(null);
     const [showFilterSettings, setShowFilterSettings] = useState(false);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [currentFlashcardFocus, setCurrentFlashcardFocus] = useState("");
 
     function onSelectNextCard(selectedIndex: number) {
         setCarouselIndex(selectedIndex);
@@ -299,6 +303,38 @@ export default function ViewFlashcardsViewModel() {
         console.log(tags);
     }
 
+    function onClickEnterEditCardMode() {
+
+    }
+
+    function onClickExitEditCardMode() {
+
+    }
+
+    function handleShowDeleteModal(flashcardId: string) {
+        setShowDeleteModal(true);
+        setCurrentFlashcardFocus(flashcardId);
+    }
+
+    function handleCloseDeleteModal() {
+        setShowDeleteModal(false);
+        setCurrentFlashcardFocus("");
+    }
+
+    async function onClickDeleteFlashcard() {
+        if (auth.currentUser) {
+            try {
+                await DeleteFlashcardUseCase(currentFlashcardFocus).then((response) => {
+                    let upadatedFlashcards = flashcards.filter(flashcard => flashcard.id !== currentFlashcardFocus);
+                    setFlashcards(upadatedFlashcards);
+                    handleCloseDeleteModal();
+                });
+            } catch (error: any) {
+                console.log(error);
+            }
+        }
+    }
+
     return {
         flashcards,
         tags,
@@ -308,6 +344,11 @@ export default function ViewFlashcardsViewModel() {
         checkboxInputs,
         carouselIndex,
         showFilterSettings,
+        onClickEnterEditCardMode,
+        showDeleteModal,
+        handleShowDeleteModal,
+        handleCloseDeleteModal,
+        onClickDeleteFlashcard,
         onClickHandleShowFilterSettings,
         onClickHandleCloseFilterSettings,
         onSelectNextCard,

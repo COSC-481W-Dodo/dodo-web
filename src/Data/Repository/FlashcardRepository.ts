@@ -1,5 +1,5 @@
 import { db } from '../DataSource/firebase';
-import { doc, setDoc} from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, updateDoc} from 'firebase/firestore';
 import { Card } from '../../Common/interfaces';
 import { query, where, collection, getDocs } from 'firebase/firestore';
 
@@ -30,5 +30,11 @@ export async function getFlashcardsByCurrentUserAndTags(userId: string, tagsSele
 export async function getFlashcardsByTags(tagsSelected: Array<string>) {
     const q = query(collection(db, "flashcards"), where("tags", "array-contains-any", tagsSelected));
     const result = await getDocs(q);
+    return result;
+}
+
+// delete flashcard ()
+export async function deleteFlashcard(flashcardId: string){;
+    const result = await deleteDoc(doc(db, "flashcards", flashcardId));
     return result;
 }
