@@ -232,8 +232,6 @@ export default function ViewFlashcardsViewModel() {
             } else if (showOnlyUser.current && selectedTagIds.current.length === 0) {
                 getFlashcardsByCurrentUser();
             }
-
-            setInitialValues()
         }
     }
 
