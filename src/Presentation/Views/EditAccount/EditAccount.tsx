@@ -2,6 +2,7 @@ import useViewModel from './EditAccountViewModel';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect } from 'react';
 
+
 import './edit-account.css';
 
 function EditAccount() {
@@ -22,11 +23,13 @@ function EditAccount() {
         onClickShowOldPassword,
         onClickShowNewPassword,
         newPasswordType,
-        oldPasswordType
+        oldPasswordType,
+        navigate
     } = useViewModel();
 
     useEffect(() => {
         getUserData();
+
     }, []);
 
     return (
