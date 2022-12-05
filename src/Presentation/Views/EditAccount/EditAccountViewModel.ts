@@ -4,6 +4,7 @@ import { ChangePasswordUseCase } from "../../../Domain/UseCase/User/ChangePasswo
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '../../../Data/DataSource/firebase';
 import * as Yup from 'yup';
+import {useNavigate} from "react-router-dom";
 
 interface EditUsernameFormValues {
     username: string,
@@ -46,11 +47,16 @@ export default function EditAccountViewModel() {
         newPassword: Yup.string().min(8, 'Must be at least 8 characters long' ).required("Please provide a password.").matches(/^(?=.*[A-Z])(?=.*[()@#$%^&+=]).*$/, "Password must have at least one capital letter and one special character.")
     })
 
+    const navigate = useNavigate();
+
     function getUserData() {
         onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
+            // if we have a user, set the user, otherwise, redirect to home page
+            currentUser ? setUser(currentUser) : navigate("/");
         });
     }
+
+
 
     function onClickToggleEditUsername() {
         if (isEditingUsername) {
@@ -137,6 +143,7 @@ export default function EditAccountViewModel() {
         onClickShowOldPassword,
         onClickShowNewPassword,
         newPasswordType,
-        oldPasswordType
+        oldPasswordType,
+        navigate
     }
 }

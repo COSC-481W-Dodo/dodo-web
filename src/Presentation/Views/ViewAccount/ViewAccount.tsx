@@ -8,8 +8,8 @@ function ViewAccount() {
     const [user, setUser] = useState({});
     React.useEffect(() => {
         // when auth changes, set the current user
-        // if not logged in, redirect to login page
-        onAuthStateChanged(auth, (currentUser: any) => {currentUser ? setUser(currentUser) : navigate("/login");})
+        // if not logged in, redirect to home page
+        onAuthStateChanged(auth, (currentUser: any) => {currentUser ? setUser(currentUser) : navigate("/");})
       },[]);
 
       return (
