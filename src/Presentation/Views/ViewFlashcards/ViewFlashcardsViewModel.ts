@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, MouseEvent, KeyboardEvent } from 'react';
+import { useState, useRef, MouseEvent, KeyboardEvent } from 'react';
 import { Card, Tag, FilterForm } from '../../../Common/interfaces';
 import { auth } from '../../../Data/DataSource/firebase';
 import { DocumentData } from 'firebase/firestore';
@@ -12,11 +12,9 @@ import { DeleteFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/Delete
 import { EditFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/EditFlashcard';
 
 import * as Yup from 'yup';
-import { editFlashcard } from '../../../Data/Repository/FlashcardRepository';
 
 export default function ViewFlashcardsViewModel() {
     const [carouselIndex, setCarouselIndex] = useState(0);
-    const [showAnswer, setShowAnswer] = useState<Array<boolean>>([]);
     const [flashcards, setFlashcards] = useState<Array<Card>>([]);
     const [tags, setTags] = useState<Array<Tag>>([]);
     const [allTags, setAllTags] = useState<Array<Tag>>([]);
@@ -189,17 +187,16 @@ export default function ViewFlashcardsViewModel() {
                 if (!containsTag(tag)) {
                     // deselect tag from the form that isn't a user tag
                     values.selected = values.selected.filter((selectedTagId) => selectedTagId !== tag.id);
-                    // removes 
+                    // removes tag names that isn't a part of the user tags
                     selectedTagNames.current = selectedTagNames.current.filter((selectedTag) => selectedTag !== tag.name)
                 }
                 return null;
             });
-            showOnlyUser.current = true;
             setTags(userTags);
         } else {
-            showOnlyUser.current = false;
             setTags(allTags);
         }
+        
         console.log(currentTagNames.current);
     }
 
@@ -241,6 +238,12 @@ export default function ViewFlashcardsViewModel() {
             } else if (showOnlyUser.current && selectedTagIds.current.length === 0) {
                 getFlashcardsByCurrentUser();
             }
+
+            setInitialValues(previousState => {
+                return { ...previousState, showOnlyCurrentUser: showOnlyUser.current, selected: selectedTagIds.current }
+            });
+
+            setShowFilterSettings(false);
         }
     }
 
@@ -255,7 +258,7 @@ export default function ViewFlashcardsViewModel() {
                             { id: doc.id, ...doc.data() }
                         ]);
 
-                        initializeEditModes()
+                        initializeEditModes();
                     });
                 });
             } catch (error: any) {
@@ -274,7 +277,7 @@ export default function ViewFlashcardsViewModel() {
                         { id: doc.id, ...doc.data() }
                     ]);
 
-                    initializeEditModes()
+                    initializeEditModes();
                 });
             });
         } catch (error: any) {
@@ -294,7 +297,7 @@ export default function ViewFlashcardsViewModel() {
                             { id: doc.id, ...doc.data() }
                         ]);
 
-                        initializeEditModes()
+                        initializeEditModes();
                     });
                 });
                 
@@ -313,11 +316,20 @@ export default function ViewFlashcardsViewModel() {
 
     function onClickHandleShowFilterSettings() {
         setShowFilterSettings(true);
+        if (showOnlyUser.current) {
+            console.log("I am true")
+            setTags(userTags);
+        } else {
+            console.log("I am false")
+            setTags(allTags);
+        }
         console.log(tags);
     }
 
     function onClickHandleCloseFilterSettings() {
         setShowFilterSettings(false);
+        selectedTagNames.current = [...currentTagNames.current];
+        
         console.log(tags);
     }
 
@@ -355,9 +367,6 @@ export default function ViewFlashcardsViewModel() {
             if (questionNode && answerNode) {
                 const updatedQuestion = questionNode.textContent;
                 const updatedAnswer = answerNode.textContent;
-
-                console.log(updatedQuestion)
-                console.log(updatedAnswer)
 
                 if (updatedQuestion !== null && updatedAnswer !== null) {
 

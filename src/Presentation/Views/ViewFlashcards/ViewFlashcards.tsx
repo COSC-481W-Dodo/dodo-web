@@ -110,7 +110,7 @@ function ViewFlashcards() {
                                     </div>
 
                                     <div className='text-center mb-3'>
-                                        <button type='submit' className='btn btn-success' onClick={onClickHandleCloseFilterSettings}>Apply Filters</button>
+                                        <button type='submit' className='btn btn-success'>Apply Filters</button>
                                         <ErrorMessage name='selected' render={message => <div className='text-danger'>{message}</div>} />
                                     </div>
                                 </Form>
