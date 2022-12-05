@@ -38,3 +38,12 @@ export async function deleteFlashcard(flashcardId: string){;
     const result = await deleteDoc(doc(db, "flashcards", flashcardId));
     return result;
 }
+
+// eidt flashcard ()
+export async function editFlashcard(flashcardId : string, updatedQuestion : string, updatedAnswer: string){
+    const result = await updateDoc(doc(db,"flashcards", flashcardId), {
+        question: updatedQuestion,
+        answer: updatedAnswer
+    });
+    return result;
+}

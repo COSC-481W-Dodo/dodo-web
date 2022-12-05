@@ -89,3 +89,7 @@
 .delete-card-icon {
     color: #ba1a1a;
 }
+
+.database-text {
+    white-space: pre-wrap;
+}

@@ -9,8 +9,10 @@ import { GetFlashcardsByCurrentUserUseCase } from '../../../Domain/UseCase/Flash
 import { GetFlashcardsByCurrentUserAndTagsUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByCurrentUserAndTags';
 import { GetFlashcardsByTagsUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByTags';
 import { DeleteFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/DeleteFlashcard';
+import { EditFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/EditFlashcard';
 
 import * as Yup from 'yup';
+import { editFlashcard } from '../../../Data/Repository/FlashcardRepository';
 
 export default function ViewFlashcardsViewModel() {
     const [carouselIndex, setCarouselIndex] = useState(0);
@@ -30,6 +32,7 @@ export default function ViewFlashcardsViewModel() {
     const checkboxInputs = useRef<HTMLDivElement>(null);
     const [showFilterSettings, setShowFilterSettings] = useState(false);
 
+    const viewCardsRef = useRef<HTMLDivElement>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [currentFlashcardFocus, setCurrentFlashcardFocus] = useState("");
     const [editMode, setEditMode] = useState<Array<boolean>>([]);
@@ -318,10 +321,15 @@ export default function ViewFlashcardsViewModel() {
         console.log(tags);
     }
 
-    function onClickEnterEditCardMode(index: number, flashcardId: string) {
-        let newEditModes = [...editMode];
-        newEditModes[index] = true;
-        setEditMode(newEditModes);
+    function onClickToggleEditMode(index: number, flashcardId: string) {
+        if (editMode[index]) {
+            editFlashcard(index, flashcardId);
+        } else {
+            let newEditModes = [...editMode];
+            newEditModes[index] = true;
+            setEditMode(newEditModes);
+        }
+        
     }
 
     function exitEditMode(index: number) {
@@ -330,14 +338,55 @@ export default function ViewFlashcardsViewModel() {
         setEditMode(newEditModes);
     }
 
-
-    function saveChanges(index: number, flashcardId: string) {
-
+    function onKeyDownSaveChanges(event: KeyboardEvent<Element>, index: number, flashcardId: string) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            editFlashcard(index, flashcardId);
+        }
     }
 
-    function onKeyDownSaveChanges(event: KeyboardEvent<Element>, index: number, flashcardId: string) {
-        if (event.key === "Enter") {
-            event.preventDefault();
+    async function editFlashcard(index: number, flashcardId: string) {
+        const viewCardsNode = viewCardsRef.current;
+
+        if (viewCardsNode !== null && viewCardsNode !== undefined) {
+            const questionNode = viewCardsNode.querySelector(`#${CSS.escape(flashcardId + '-question')}`);
+            const answerNode = viewCardsNode.querySelector(`#${CSS.escape(flashcardId + '-answer')}`);
+
+            if (questionNode && answerNode) {
+                const updatedQuestion = questionNode.textContent;
+                const updatedAnswer = answerNode.textContent;
+
+                console.log(updatedQuestion)
+                console.log(updatedAnswer)
+
+                if (updatedQuestion !== null && updatedAnswer !== null) {
+
+                    
+                    try {
+                        await EditFlashcardUseCase(flashcardId, updatedQuestion, updatedAnswer).then((response) => {
+                            let updatedFlashcards = [...flashcards];
+                            updatedFlashcards[index] = {
+                                ...updatedFlashcards[index], 
+                                question: updatedQuestion, 
+                                answer: updatedAnswer
+                            }
+
+                            setFlashcards(prevFlashcards => 
+                                prevFlashcards.map(flashcard => {
+                                    if (flashcard.id === flashcardId) {
+                                        return {... flashcard, question: updatedQuestion, answer: updatedAnswer}
+                                    }
+                                    return flashcard;
+                                })
+                            );
+                        })
+                    } catch (error: any) {
+                        console.log(error);
+                    }
+                }
+            }
+            
+            exitEditMode(index);
         }
     }
 
@@ -374,9 +423,10 @@ export default function ViewFlashcardsViewModel() {
         checkboxInputs,
         carouselIndex,
         showFilterSettings,
-        onClickEnterEditCardMode,
         editMode,
         showDeleteModal,
+        viewCardsRef,
+        onClickToggleEditMode,
         handleShowDeleteModal,
         onKeyDownSaveChanges,
         handleCloseDeleteModal,

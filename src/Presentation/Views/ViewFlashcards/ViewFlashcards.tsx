@@ -1,11 +1,10 @@
 import useViewModel from './ViewFlashcardsViewModel';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from "../../../Data/DataSource/firebase";
 
-import Card from '@mui/material/Card';
 import TuneIcon from '@mui/icons-material/Tune';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,9 +26,10 @@ function ViewFlashcards() {
         carouselIndex,
         editMode,
         showFilterSettings,
-        onClickEnterEditCardMode,
-        onKeyDownSaveChanges,
+        viewCardsRef,
         showDeleteModal,
+        onClickToggleEditMode,
+        onKeyDownSaveChanges,
         handleShowDeleteModal,
         handleCloseDeleteModal,
         onClickDeleteFlashcard,
@@ -43,7 +43,7 @@ function ViewFlashcards() {
     } = useViewModel();
 
     // Carousel Function
-    const authFlag = useRef(true); 
+    const authFlag = useRef(true);
 
     //Flip Function
     const [flip, setFlip] = useState(false);
@@ -165,24 +165,20 @@ function ViewFlashcards() {
                                     // display each flashcard
                                     flashcards.map((flashcard, index) => {
                                         return (
-                                            <Carousel.Item>
+                                            <Carousel.Item key={flashcard.id}>
                                                 <div className={`flashcard-view view-cards ${flip ? 'flip' : ''}`} onClick={() => setFlip(!flip)}>
                                                     <div className="front">
-                                                        <p className='text-center'>{flashcard.question}</p>
+                                                        <p className='text-center database-text'>{flashcard.question}</p>
                                                     </div>
                                                     <div className="back">
-                                                        <p className='text-center'>{flashcard.answer}</p>
+                                                        <p className='text-center database-text'>{flashcard.answer}</p>
                                                     </div>
-                                                    {/* <p>{flip ? flashcard.answer : flashcard.question}</p> */}
-                                                    {/* <h3>{ flashcard.answer }</h3> */}
                                                 </div>
-                                                
                                             </Carousel.Item>
                                             
                                         );
                                     })
                                 }
-                                
                             </Carousel>
                         </div>
                     </div>
@@ -196,7 +192,7 @@ function ViewFlashcards() {
                             {/* TODO make into its own component */}
                             {
                                 flashcards.length > 0 &&
-                                <>
+                                <div ref={viewCardsRef}>
                                     <p className='m-2 view-cards-title'>Cards in this set</p>
                                     {
                                         flashcards.map((flashcard, index) => {
@@ -206,31 +202,33 @@ function ViewFlashcards() {
                                                         {
                                                             !editMode[index] ?
                                                             <>
-                                                                <p className='p-3 col-5 question-section'>{ flashcard.question }</p>
-                                                                <p className='p-3 col-5 answer-section'>{ flashcard.answer }</p>
+                                                                <p className='p-3 col-5 question-section database-text'>{ flashcard.question }</p>
+                                                                <p className='p-3 col-5 answer-section database-text'>{ flashcard.answer }</p>
                                                             </> :
                                                             <>
-                                                                <div className='p-3 col-5'>
+                                                                <div className='p-3 col-5 question-section'>
                                                                     <span
+                                                                        id={`${flashcard.id}-question`}
                                                                         contentEditable
-                                                                        className='m-3 flashcard-input flashcard-question' 
+                                                                        className='m-3 flashcard-input flashcard-question database-text' 
                                                                         role="textbox"
                                                                         onKeyDown={(e) => onKeyDownSaveChanges(e, index, flashcard.id)}
-                                                                    >{flashcard.question}</span>
+                                                                    >{ flashcard.question }</span>
                                                                 </div>
 
-                                                                <div className='p-3 col-5'>
+                                                                <div className='p-3 col-5 answer-section'>
                                                                     <span
+                                                                        id={`${flashcard.id}-answer`}
                                                                         contentEditable
-                                                                        className='m-3 flashcard-input flashcard-answer' 
+                                                                        className='m-3 flashcard-input flashcard-answer database-text' 
                                                                         role="textbox"
                                                                         onKeyDown={(e) => onKeyDownSaveChanges(e, index, flashcard.id)}
-                                                                    >{flashcard.answer}</span>
+                                                                    >{ flashcard.answer }</span>
                                                                 </div>
                                                             </>
                                                         }
                                                         
-                                                        <p className='p-3 col-1 edit-icon' onClick={() => onClickEnterEditCardMode(index, flashcard.id)}><EditIcon /></p>
+                                                        <p className='p-3 col-1 edit-icon' onClick={() => onClickToggleEditMode(index, flashcard.id)}><EditIcon /></p>
                                                         <p className='p-3 col-1 delete-card-icon' onClick={() => handleShowDeleteModal(flashcard.id)}><DeleteIcon /></p>
                                                     </div>
                                                 );
@@ -244,7 +242,7 @@ function ViewFlashcards() {
                                             }
                                         })
                                     }
-                                </>
+                                </div>
                             }
                             
                         </div>
