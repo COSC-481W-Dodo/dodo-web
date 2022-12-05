@@ -1,11 +1,15 @@
 import React, {useState} from "react";
 import { auth } from "../../../Data/DataSource/firebase";
 import {onAuthStateChanged} from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
 
 function ViewAccount() {
+    const navigate = useNavigate();
     const [user, setUser] = useState({});
     React.useEffect(() => {
-        onAuthStateChanged(auth, (currentUser: any) => {setUser(currentUser);})  
+        // when auth changes, set the current user
+        // if not logged in, redirect to login page
+        onAuthStateChanged(auth, (currentUser: any) => {currentUser ? setUser(currentUser) : navigate("/login");})
       },[]);
 
       return (
