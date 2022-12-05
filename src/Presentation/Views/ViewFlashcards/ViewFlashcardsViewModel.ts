@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, MouseEvent } from 'react';
+import { useEffect, useState, useRef, MouseEvent, KeyboardEvent } from 'react';
 import { Card, Tag, FilterForm } from '../../../Common/interfaces';
 import { auth } from '../../../Data/DataSource/firebase';
 import { DocumentData } from 'firebase/firestore';
@@ -8,8 +8,11 @@ import { GetAllTagsUseCase } from '../../../Domain/UseCase/Tag/GetAllTags';
 import { GetFlashcardsByCurrentUserUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByCurrentUser';
 import { GetFlashcardsByCurrentUserAndTagsUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByCurrentUserAndTags';
 import { GetFlashcardsByTagsUseCase } from '../../../Domain/UseCase/Flashcard/GetFlashcardsByTags';
+import { DeleteFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/DeleteFlashcard';
+import { EditFlashcardUseCase } from '../../../Domain/UseCase/Flashcard/EditFlashcard';
 
 import * as Yup from 'yup';
+import { editFlashcard } from '../../../Data/Repository/FlashcardRepository';
 
 export default function ViewFlashcardsViewModel() {
     const [carouselIndex, setCarouselIndex] = useState(0);
@@ -29,6 +32,11 @@ export default function ViewFlashcardsViewModel() {
     const checkboxInputs = useRef<HTMLDivElement>(null);
     const [showFilterSettings, setShowFilterSettings] = useState(false);
 
+    const viewCardsRef = useRef<HTMLDivElement>(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [currentFlashcardFocus, setCurrentFlashcardFocus] = useState("");
+    const [editMode, setEditMode] = useState<Array<boolean>>([]);
+
     function onSelectNextCard(selectedIndex: number) {
         setCarouselIndex(selectedIndex);
     };
@@ -47,6 +55,7 @@ export default function ViewFlashcardsViewModel() {
 
         if (auth.currentUser) {
             setFlashcards([]);
+            setEditMode([]);
 
             if (sessionStorage.getItem("showOnlyCurrentUser") !== null) {
                 
@@ -245,6 +254,8 @@ export default function ViewFlashcardsViewModel() {
                             ...prevFlashcards,
                             { id: doc.id, ...doc.data() }
                         ]);
+
+                        initializeEditModes()
                     });
                 });
             } catch (error: any) {
@@ -262,6 +273,8 @@ export default function ViewFlashcardsViewModel() {
                         ...prevFlashcards,
                         { id: doc.id, ...doc.data() }
                     ]);
+
+                    initializeEditModes()
                 });
             });
         } catch (error: any) {
@@ -280,6 +293,8 @@ export default function ViewFlashcardsViewModel() {
                             ...prevFlashcards,
                             { id: doc.id, ...doc.data() }
                         ]);
+
+                        initializeEditModes()
                     });
                 });
                 
@@ -287,6 +302,13 @@ export default function ViewFlashcardsViewModel() {
                 console.log(error);
             }
         }
+    }
+
+    function initializeEditModes() {
+        setEditMode(prevEditModes => [
+            ...prevEditModes,
+            false
+        ]);
     }
 
     function onClickHandleShowFilterSettings() {
@@ -299,6 +321,99 @@ export default function ViewFlashcardsViewModel() {
         console.log(tags);
     }
 
+    function onClickToggleEditMode(index: number, flashcardId: string) {
+        if (editMode[index]) {
+            editFlashcard(index, flashcardId);
+        } else {
+            let newEditModes = [...editMode];
+            newEditModes[index] = true;
+            setEditMode(newEditModes);
+        }
+        
+    }
+
+    function exitEditMode(index: number) {
+        let newEditModes = [...editMode];
+        newEditModes[index] = false;
+        setEditMode(newEditModes);
+    }
+
+    function onKeyDownSaveChanges(event: KeyboardEvent<Element>, index: number, flashcardId: string) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            editFlashcard(index, flashcardId);
+        }
+    }
+
+    async function editFlashcard(index: number, flashcardId: string) {
+        const viewCardsNode = viewCardsRef.current;
+
+        if (viewCardsNode !== null && viewCardsNode !== undefined) {
+            const questionNode = viewCardsNode.querySelector(`#${CSS.escape(flashcardId + '-question')}`);
+            const answerNode = viewCardsNode.querySelector(`#${CSS.escape(flashcardId + '-answer')}`);
+
+            if (questionNode && answerNode) {
+                const updatedQuestion = questionNode.textContent;
+                const updatedAnswer = answerNode.textContent;
+
+                console.log(updatedQuestion)
+                console.log(updatedAnswer)
+
+                if (updatedQuestion !== null && updatedAnswer !== null) {
+
+                    
+                    try {
+                        await EditFlashcardUseCase(flashcardId, updatedQuestion, updatedAnswer).then((response) => {
+                            let updatedFlashcards = [...flashcards];
+                            updatedFlashcards[index] = {
+                                ...updatedFlashcards[index], 
+                                question: updatedQuestion, 
+                                answer: updatedAnswer
+                            }
+
+                            setFlashcards(prevFlashcards => 
+                                prevFlashcards.map(flashcard => {
+                                    if (flashcard.id === flashcardId) {
+                                        return {... flashcard, question: updatedQuestion, answer: updatedAnswer}
+                                    }
+                                    return flashcard;
+                                })
+                            );
+                        })
+                    } catch (error: any) {
+                        console.log(error);
+                    }
+                }
+            }
+            
+            exitEditMode(index);
+        }
+    }
+
+    function handleShowDeleteModal(flashcardId: string) {
+        setShowDeleteModal(true);
+        setCurrentFlashcardFocus(flashcardId);
+    }
+
+    function handleCloseDeleteModal() {
+        setShowDeleteModal(false);
+        setCurrentFlashcardFocus("");
+    }
+
+    async function onClickDeleteFlashcard() {
+        if (auth.currentUser) {
+            try {
+                await DeleteFlashcardUseCase(currentFlashcardFocus).then((response) => {
+                    let upadatedFlashcards = flashcards.filter(flashcard => flashcard.id !== currentFlashcardFocus);
+                    setFlashcards(upadatedFlashcards);
+                    handleCloseDeleteModal();
+                });
+            } catch (error: any) {
+                console.log(error);
+            }
+        }
+    }
+
     return {
         flashcards,
         tags,
@@ -308,6 +423,14 @@ export default function ViewFlashcardsViewModel() {
         checkboxInputs,
         carouselIndex,
         showFilterSettings,
+        editMode,
+        showDeleteModal,
+        viewCardsRef,
+        onClickToggleEditMode,
+        handleShowDeleteModal,
+        onKeyDownSaveChanges,
+        handleCloseDeleteModal,
+        onClickDeleteFlashcard,
         onClickHandleShowFilterSettings,
         onClickHandleCloseFilterSettings,
         onSelectNextCard,

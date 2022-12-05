@@ -79,3 +79,17 @@
     border: none;
     border-radius: 5px;
 }
+
+.edit-icon, .delete-card-icon {
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.delete-card-icon {
+    color: #ba1a1a;
+}
+
+.database-text {
+    white-space: pre-wrap;
+}
