@@ -42,7 +42,7 @@ function CreateFlashcards() {
                 setUser(currentUser);
                 setIsLoading(false);
             } else {
-                navigate("/");
+                navigate("/login"); // if user is not logged in, redirect to login page
             }
         });
     }, []);

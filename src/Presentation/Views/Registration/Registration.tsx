@@ -1,7 +1,11 @@
 import useViewModel from './RegistrationViewModel';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {onAuthStateChanged} from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
 
 import './registration.css';
+import React, {useState} from "react";
+import {auth} from "../../../Data/DataSource/firebase";
 
 function Registration() {
 
@@ -18,6 +22,15 @@ function Registration() {
         isEmailTaken, 
         isSubmitted 
     } = useViewModel();
+
+    const navigate = useNavigate();
+    const [user, setUser] = useState({});
+
+    React.useEffect(() => {
+        // when auth changes, set the current user
+        // if not logged in, redirect to home page
+        onAuthStateChanged(auth, (currentUser: any) => {!currentUser ? setUser(currentUser) : navigate("/");})
+    },[]);
 
     return (
         <div>

@@ -52,7 +52,7 @@ export default function EditAccountViewModel() {
     function getUserData() {
         onAuthStateChanged(auth, (currentUser) => {
             // if we have a user, set the user, otherwise, redirect to home page
-            currentUser ? setUser(currentUser) : navigate("/");
+            currentUser ? setUser(currentUser) : navigate("/login");
         });
     }
 
