@@ -52,7 +52,7 @@ function NavigationBar() {
                             </> :
                             <>
                                 <Link to='/create-flashcards' className='nav-link'><LibraryAddIcon className='icon-color'/> Create</Link>
-                                <Link to='/view-flashcards'> <StyleIcon /> Cards</Link>
+                                <Link to='/view-flashcards' className='nav-link'> <StyleIcon /> Cards</Link>
                                 <NavDropdown title="Account" id="basic-nav-dropdown">
                                     <NavDropdown.Item href="/view-account">View Account</NavDropdown.Item>
                                     <NavDropdown.Item href="/edit-account">Edit Account</NavDropdown.Item>
