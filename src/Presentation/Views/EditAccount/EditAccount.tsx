@@ -33,6 +33,7 @@ function EditAccount() {
     }, []);
 
     return (
+        <div className="pageContainer">
         <div className='edit-section mt-3'>
             <h1>Edit Profile</h1>
 
@@ -104,6 +105,7 @@ function EditAccount() {
                 </div>
             }
             
+        </div>
         </div>
     );
 }
