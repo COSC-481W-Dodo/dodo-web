@@ -4,18 +4,16 @@ import { Link, Outlet } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { auth } from "../../Data/DataSource/firebase";
 import { useNavigate } from 'react-router-dom';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import CreateIcon from '@mui/icons-material/Create';
 import './navigation-bar.css';
 import { NavDropdown } from 'react-bootstrap';
-
+import logo from '../../../src/dodo.png';
 
 // Logout button
 function LogoutButton () {
@@ -41,7 +39,7 @@ function NavigationBar() {
         <>
             <Navbar className='nav-background'>
                 <Container>
-                    <Navbar.Brand><Link to='/'>Dodo</Link></Navbar.Brand>
+                    <Navbar.Brand><Link to='/' className='navbar-brand'><img src={logo} width="45" height="45" alt="Logo image of a smiling dodo bird." /> Dodo</Link></Navbar.Brand>
                     <Nav>
                         { auth.currentUser === null ?
                             <>
