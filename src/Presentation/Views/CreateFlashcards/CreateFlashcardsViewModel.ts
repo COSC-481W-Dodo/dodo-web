@@ -21,7 +21,7 @@ export default function CreateFlashcardsViewModel() {
     }, [remainingTags, remainingFlashcards]);
 
     const initialValues = {
-        tags: [{ id: uuidv4(), tagName: ""}],
+        tags: [{ id: uuidv4(), name: ""}],
         flashcards: [{ id: uuidv4(), question: "", answer: "" }]
     }
 
@@ -51,19 +51,19 @@ export default function CreateFlashcardsViewModel() {
         tags.forEach(tag => {
 
             // Trimming unnecessary extra spaces
-            let name = tag.tagName.replace(/\s+/g, " ").trim();
+            let tagName = tag.name.replace(/\s+/g, " ").trim();
             
             // Verify that name isn't a duplicate AND verify that name isn't only spaces or blank after regex and trimming
-            if (uniqueTagNames.indexOf(name) === -1 && (name.search(/^\s+/g) !== 0 && name.length !== 0)) {
+            if (uniqueTagNames.indexOf(tagName) === -1 && (tagName.search(/^\s+/g) !== 0 && tagName.length !== 0)) {
                 
                 // Call function to convert the given tag name to a readable id
-                let newId = generateReadableId(name);
+                let newId = generateReadableId(tagName);
                 
                 // If generated ID is empty
                 if (newId.length > 0 && uniqueTagIds.indexOf(newId) === -1) {
-                    uniqueTagNames.push(name);
+                    uniqueTagNames.push(tagName);
                     uniqueTagIds.push(newId);
-                    newTags.push({ id: newId, tagName: name });
+                    newTags.push({ id: newId, name: tagName });
                 }
             }
         });

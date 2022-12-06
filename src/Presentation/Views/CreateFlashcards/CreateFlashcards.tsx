@@ -42,7 +42,7 @@ function CreateFlashcards() {
                 setUser(currentUser);
                 setIsLoading(false);
             } else {
-                navigate("/");
+                navigate("/login"); // if user is not logged in, redirect to login page
             }
         });
     }, []);
@@ -77,7 +77,7 @@ function CreateFlashcards() {
                                                                 className={ getIn(errors, `tags.[${index}]`) ? "m-3 tag-input tag-error" : "m-3 tag-input" }
                                                                 role="textbox"
                                                                 onKeyDown={onKeyDownPreventEnter}
-                                                                onInput={(e) => setFieldValue(`tags.[${index}].tagName`, e.currentTarget.innerText)}
+                                                                onInput={(e) => setFieldValue(`tags.[${index}].name`, e.currentTarget.innerText)}
                                                             ></span>
 
                                                             <button className='remove-tag' disabled={ tags.length > 1 ? false : true } onClick={() => arrayHelpers.remove(index)}>
@@ -88,7 +88,7 @@ function CreateFlashcards() {
                                                         </div>
                                                     ))}
                                                     <div className='add-tag-area'>
-                                                        <button className='add-tag' onClick={() => arrayHelpers.push({ id: uuidv4(), tagName: "" })}>
+                                                        <button className='add-tag' onClick={() => arrayHelpers.push({ id: uuidv4(), name: "" })}>
                                                             <AddCircleIcon />
                                                         </button>
                                                     </div>
@@ -109,7 +109,7 @@ function CreateFlashcards() {
                                         <div className='flashcard-section'>
                                             {(flashcards && flashcards.length > 0) && (
                                                 flashcards.map((flashcard: Card, index: number) => (
-                                                    <div className='flashcard container mx-auto' key={flashcard.id}>
+                                                    <div className='flashcard-create container mx-auto' key={flashcard.id}>
 
                                                         {/* Card Options */}
                                                         <div className='row top-card-options ms-2 me-2'>

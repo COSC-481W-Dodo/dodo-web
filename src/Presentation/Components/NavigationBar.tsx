@@ -11,6 +11,10 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import CreateIcon from '@mui/icons-material/Create';
+import StyleIcon from '@mui/icons-material/Style';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from '@mui/icons-material/Home';
 import './navigation-bar.css';
 import { NavDropdown } from 'react-bootstrap';
 import logo from '../../../src/dodo.png';
@@ -48,6 +52,7 @@ function NavigationBar() {
                             </> :
                             <>
                                 <Link to='/create-flashcards' className='nav-link'><LibraryAddIcon className='icon-color'/> Create</Link>
+                                <Link to='/view-flashcards'> <StyleIcon /> Cards</Link>
                                 <NavDropdown title="Account" id="basic-nav-dropdown">
                                     <NavDropdown.Item href="/view-account">View Account</NavDropdown.Item>
                                     <NavDropdown.Item href="/edit-account">Edit Account</NavDropdown.Item>

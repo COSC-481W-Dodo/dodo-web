@@ -1,0 +1,95 @@
+.current-tag {
+    display: inline-block;
+    color: white;
+    font-weight: bold;
+    background-color: #6750a4;
+    border-radius: 15px;
+    padding: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 5px;
+    text-align: center;
+}
+
+.question-section {
+    border-right: 2px solid black;
+}
+
+.answer-section, .question-section {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.flashcard-carousel-text {
+    text-align: center;
+    height: 200px;
+    position: relative;
+}
+
+.view-cards {
+    background-color: #e7e0eb !important;
+    border-radius: .25rem;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
+}
+
+.flashcard-view {
+    background-color: #e7e0eb !important;
+    margin: 10px;
+    height: 400px;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: 150ms;
+    transform-style: preserve-3d !important;
+    transform: perspective(1000px) rotateY(var(--rotate-y, 0));
+    
+}
+
+.view-cards-title {
+    font-weight: bold;
+    font-size: large;
+}
+
+.flashcard-view.flip{
+    --rotate-y: 180deg;
+}
+
+.flashcard-view .front,
+.flashcard-view .back {
+    font-size: 25px;
+    font-weight: bold;
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+.flashcard-view .back{
+    transform: rotateY(180deg);
+}
+
+.filter-button {
+    display: inline-block;
+}
+
+.filter-button button {
+    background-color: #1c1b1e;
+    padding: 5px;
+    color: #e7e0eb;
+    border: none;
+    border-radius: 5px;
+}
+
+.edit-icon, .delete-card-icon {
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.delete-card-icon {
+    color: #ba1a1a;
+}
+
+.database-text {
+    white-space: pre-wrap;
+}
