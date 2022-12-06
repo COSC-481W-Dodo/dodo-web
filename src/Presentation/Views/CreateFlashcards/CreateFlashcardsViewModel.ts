@@ -28,7 +28,7 @@ export default function CreateFlashcardsViewModel() {
     const validationSchema = Yup.object().shape({
         tags: Yup.array().of(
             Yup.object().shape({
-                tagName: Yup.string().required("Add a tag")
+                name: Yup.string().required("Add a tag")
             })
         ).min(1, "Please provide at least one tag"),
         flashcards: Yup.array().of(

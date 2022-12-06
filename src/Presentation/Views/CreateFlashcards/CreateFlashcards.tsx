@@ -74,7 +74,7 @@ function CreateFlashcards() {
                                                             <span 
                                                                 id={`${tag.id}`}
                                                                 contentEditable
-                                                                className={ getIn(errors, `tags.[${index}]`) ? "m-3 tag-input tag-error" : "m-3 tag-input" }
+                                                                className={ getIn(errors, `tags.[${index}].name`) ? "m-3 tag-input tag-error" : "m-3 tag-input" }
                                                                 role="textbox"
                                                                 onKeyDown={onKeyDownPreventEnter}
                                                                 onInput={(e) => setFieldValue(`tags.[${index}].name`, e.currentTarget.innerText)}
