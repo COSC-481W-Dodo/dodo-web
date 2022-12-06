@@ -1,13 +1,29 @@
 .edit-account-links {
     cursor: pointer;
     text-align: center;
+    color: #6750a4;
 }
 
 .edit-section {
     width: 35rem;
     margin: auto;
+    background-color: #fffbff;
 }
 
 .edit-section h1 {
     text-align: center;
+
+}
+
+.pageContainer {
+    color: #1c1b1e;
+}
+
+.btn-primary {
+    background-color: #6750a4 !important;
+}
+
+.btn-secondary {
+    background-color: #e9ddff !important;
+    color: #1c1b1e !important;
 }

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { auth } from "../../../Data/DataSource/firebase";
 import {onAuthStateChanged} from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import './view-account.css';
 
 function ViewAccount() {
     const navigate = useNavigate();
@@ -13,13 +14,13 @@ function ViewAccount() {
       },[]);
 
       return (
-        <div>
+        <div className="wholePage">
             <h1>View Account Page</h1>
             <div>
                 <ul>
                     <li><b>Current Username:</b> {auth.currentUser?.displayName}</li>
                     <li><b>Current Email:</b> {auth.currentUser?.email}</li>
-                    </ul>
+                </ul>
             </div>
 
         </div>
