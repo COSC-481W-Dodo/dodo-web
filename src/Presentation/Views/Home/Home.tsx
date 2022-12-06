@@ -47,7 +47,7 @@ function Home() {
             <Image className="home-logo" src={logo} />
                 <FeatureCards />
             <br />
-            <h3><a href="https://www.dropbox.com/s/dksnicq1sxqtcat/sprint3.apk?dl=0" target="_blank" rel="noreferrer"> <AndroidIcon /> Download the App</a></h3>
+            <h3><a href="https://www.dropbox.com/s/x4wecfgjj1q13pb/sprint_3_fixed.apk?dl=0" target="_blank" rel="noreferrer"> <AndroidIcon /> Download the App</a></h3>
         </div>
     );
 }
